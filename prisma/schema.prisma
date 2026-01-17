@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/**
+ * =======================
+ * ENUMS
+ * =======================
+ */
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+enum AccountType {
+  CASH
+  BANK
+  WALLET
+  CREDIT
+}
+
+enum PaymentMethodType {
+  BANK
+  CARD
+  WALLET
+  CASH
+  OTHER
+}
+
+/**
+ * =======================
+ * USER
+ * =======================
+ */
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String
+  name     String?
+  image    String? @db.VarChar(500)
+
+  accounts     Account[]
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/**
+ * =======================
+ * ACCOUNT
+ * =======================
+ */
+
+model Account {
+  id            String      @id @default(uuid())
+  name          String // HDFC Bank, Amazon Pay, Cash
+  type          AccountType
+  balance       Float       @default(0)
+  accountNumber String?
+  email         String?
+  phone         String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  paymentMethods PaymentMethod[]
+  transactions   Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+/**
+ * =======================
+ * PAYMENT METHOD
+ * =======================
+ */
+
+model PaymentMethod {
+  id    String            @id @default(uuid())
+  type  PaymentMethodType // CARD, BANK, WALLET, OTHER
+  label String // User-defined (e.g. "HDFC Credit Card", "UPI Lite")
+
+  isActive  Boolean @default(true)
+  isDefault Boolean @default(false)
+
+  accountId String
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+
+  @@index([accountId])
+}
+
+/**
+ * =======================
+ * TRANSACTION
+ * =======================
+ */
+
+model Transaction {
+  id          String          @id @default(uuid())
+  description String
+  amount      Float // Always POSITIVE
+  type        TransactionType
+
+  category String?
+  date     DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accountId String
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  paymentMethodId String
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+
+  /**
+   * ===== Transfer Support =====
+   */
+  transferId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([paymentMethodId])
+  @@index([type])
+  @@index([date])
+}
