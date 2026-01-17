@@ -3,6 +3,7 @@ import ChartRadialStacked from "@/components/Chart";
 import GoalsCard from "@/components/GoalsCard";
 import StatsCard from "@/components/StatsCard";
 import { DataTableDemo } from "@/components/TransactionTable";
+import { Card } from "@/components/ui/card";
 
 const Dashboard = () => {
   return (
@@ -48,9 +49,9 @@ const Dashboard = () => {
       </div>
 
       <div className="grid gap-4 grid-cols-12">
-        <div className="col-span-8 h-full">
+        <Card className="col-span-8 h-full py-4 px-6">
           <DataTableDemo />
-        </div>
+        </Card>
         <div className="col-span-4 h-full">
           <GoalsCard />
         </div>

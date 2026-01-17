@@ -10,6 +10,7 @@ const GoalsCard = () => {
           <CommonProgress amount={45000} label="MacBook Pro" percentage={60} />
           <CommonProgress amount={3500} label="New cor" percentage={40} />
           <CommonProgress amount={900000} label="New house" percentage={10} />
+          <CommonProgress amount={90000} label="New car" percentage={1} />
         </div>
       </CommonUrlCard>
     </div>
