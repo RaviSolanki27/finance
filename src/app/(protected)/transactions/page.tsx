@@ -61,10 +61,24 @@ const formSchema = z.object({
     .refine((val) => Number(val) <= 100000, {
       message: "Amount must be less than 100000.",
     }),
+
+  time: z
+    .string()
+    .nonempty("Please select a time.")
+    .regex(/^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/, "Invalid time format"),
 });
 
 const Transactions = () => {
   const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,7 +90,8 @@ const Transactions = () => {
       category: "",
       account: "",
       method: "",
-      date: undefined,
+      date: new Date(),
+      time: getCurrentTime(),
     },
   });
 
@@ -99,7 +114,26 @@ const Transactions = () => {
 
   return (
     <div>
-      <Dialog>
+      <Dialog
+        open={dialogOpen}
+        onOpenChange={(isOpen) => {
+          setDialogOpen(isOpen);
+
+          if (!isOpen) {
+            form.reset({
+              title: "",
+              description: "",
+              type: "",
+              amount: "",
+              category: "",
+              account: "",
+              method: "",
+              date: new Date(), // 👈 reset to today
+              time: getCurrentTime(), // 👈 reset to current time
+            });
+          }
+        }}
+      >
         <DialogTrigger asChild>
           <Button>
             <PlusCircle />
@@ -292,47 +326,88 @@ const Transactions = () => {
               </div>
             </FieldGroup>
 
-            <FieldGroup>
-              <Controller
-                name="date"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel>Date</FieldLabel>
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal"
-                        >
-                          {field.value
-                            ? field.value.toDateString()
-                            : "Pick a date"}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={(date) => {
-                            field.onChange(date);
-                            setOpen(false); 
-                          }}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
+            <FieldGroup className="grid grid-cols-2 gap-4">
+              <div>
+                <Controller
+                  name="date"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>Date</FieldLabel>
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
+                            {field.value
+                              ? field.value.toDateString()
+                              : "Pick a date"}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={(date) => {
+                              field.onChange(date);
+                              setOpen(false);
+                            }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+              <div>
+                <Controller
+                  name="time"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="form-rhf-demo-time">Time</FieldLabel>
+                      <Input
+                        {...field}
+                        type="time"
+                        id="form-rhf-demo-time"
+                        step="60"
+                        aria-invalid={fieldState.invalid}
+                        className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
             </FieldGroup>
           </form>
-          <DialogFooter>
-            <Button type="button" variant={"outline"}>
+          <DialogFooter className="mt-5">
+            <Button
+              type="button"
+              variant={"outline"}
+              onClick={() => {
+                setDialogOpen(false);
+                form.reset({
+                  title: "",
+                  description: "",
+                  type: "",
+                  amount: "",
+                  category: "",
+                  account: "",
+                  method: "",
+                  date: new Date(), // 👈 reset to today
+                  time: getCurrentTime(), // 👈 reset to current time
+                });
+              }}
+            >
               Cancel
             </Button>
             <Button type="submit" form="form-rhf-demo">
