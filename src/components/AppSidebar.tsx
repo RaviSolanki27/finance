@@ -25,7 +25,7 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 const items = [
   {
     title: "Dashboard",
-    url: "/",
+    url: "/dashboard",
     icon: LayoutDashboard,
   },
   {
