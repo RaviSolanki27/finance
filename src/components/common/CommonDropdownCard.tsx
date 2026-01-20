@@ -18,7 +18,7 @@ const CommonDropdownCard = ({
   title: string;
 }) => {
   return (
-    <Card className="min-w-50 py-4 px-6 shadow-none relative">
+    <Card className="min-w-50 py-4 px-6 shadow-none relative gap-1">
       <CardHeader className="p-0">
         <div className="flex justify-between">
           <span className="font-medium ">{title}</span>

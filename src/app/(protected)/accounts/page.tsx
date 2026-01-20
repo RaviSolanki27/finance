@@ -1,11 +1,12 @@
+import CommonAccountCard from "@/components/common/CommonAccountCard";
 import CommonDropdownCard from "@/components/common/CommonDropdownCard";
 
 const Accounts = () => {
   return (
     <div>
-      <div className="grid">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
         <CommonDropdownCard title="Total balance">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             <div className="flex flex-col">
               <span className="text-3xl">$10,200.00</span>
               <span className="text-muted-foreground">
@@ -20,6 +21,15 @@ const Accounts = () => {
             </div>
           </div>
         </CommonDropdownCard>
+
+        <CommonAccountCard
+          total={5}
+          totalBalance={12000}
+          category="BANK"
+          percentage={12}
+        >
+          Hello
+        </CommonAccountCard>
       </div>
 
       <div></div>
