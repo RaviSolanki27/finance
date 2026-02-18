@@ -3,8 +3,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { verifyToken } from './lib/jwt';
 
-// const publicRoutes = ['/sign-in', '/sign-up', '/api/auth'];
-const publicRoutes = ['/'];
+const publicRoutes = ['/sign-in', '/sign-up', '/api/auth'];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -19,14 +18,13 @@ export async function proxy(request: NextRequest) {
 
   if (!token) {
     const url = request.nextUrl.clone();
-    url.pathname = '/sing-in';
+    url.pathname = '/sign-in';
     return NextResponse.redirect(url);
   }
 
   // Verify token
-  console.log('Token:', token);
   const payload = await verifyToken(token);
-  console.log('Payload:', payload);
+
   if (!payload) {
     const url = request.nextUrl.clone();
     url.pathname = '/sign-in';

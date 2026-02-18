@@ -1,53 +1,55 @@
-import React from "react";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import { ArrowDown, ArrowRight, ArrowUp } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { ArrowRight, ArrowUp, ArrowUpRight } from "lucide-react";
 import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 
-const CommonAccountCard = ({
-  children,
-  totalBalance,
-  category,
-  total = 1,
-  percentage = 12,
-}: {
-  children: React.ReactNode;
+type CommonAccountCardProps = {
   totalBalance: number;
   category?: string;
-  total: number;
-  percentage: number;
-}) => {
+  total?: number;
+  percentage?: number;
+};
+
+const CommonAccountCard = ({
+  totalBalance,
+  category = "Bank accounts",
+  total = 1,
+  percentage = 12,
+}: CommonAccountCardProps) => {
+  const formattedBalance = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+  }).format(totalBalance);
+
+  const isGrowth = percentage >= 0;
+
   return (
-    <Card className="min-w-50 py-4 px-6 shadow-none relative gap-3">
+    <Card className="relative min-w-50 gap-3 px-6 py-4 shadow-none">
       <CardHeader className="p-0">
         <div className="flex justify-between">
-          {/* <span className="font-medium text-2xl ">${totalBalance}.00</span> */}
-          <span className="font-medium ">🏦 Bank accounts</span>
-          <Badge variant={"outline"}>Active</Badge>
+          <span className="font-medium">{category}</span>
+          <Badge variant="outline">Active</Badge>
         </div>
       </CardHeader>
       <CardContent className="p-0">
         <div className="flex flex-col">
-          <span className="font-medium text-2xl">${totalBalance}.00</span>
-          <span className="flex  gap-2">
-            <Badge variant="success" className="">
-              <ArrowUp /> {percentage >= 0 ? `+${percentage}` : `${percentage}`}
-              %
+          <span className="text-2xl font-medium">{formattedBalance}</span>
+          <span className="flex gap-2">
+            <Badge variant={isGrowth ? "success" : "destructive"}>
+              {isGrowth ? <ArrowUp /> : <ArrowDown />}
+              {isGrowth ? `+${percentage}` : `${percentage}`}%
             </Badge>
-            <span className="text-muted-foreground text-sm">
-              {" "}
-              vs last month
-            </span>
+            <span className="text-sm text-muted-foreground">vs last month</span>
           </span>
         </div>
       </CardContent>
-      <CardFooter className="p-0 justify-between items-end">
-        <div className="text-xs">Last activity: Today</div>
-        <Button size={"sm"} variant={"secondary"}>
+      <CardFooter className="items-end justify-between p-0">
+        <div className="text-xs">{total} account(s)</div>
+        <Button size="sm" variant="secondary">
           See all accounts <ArrowRight />
         </Button>
       </CardFooter>
-      {/* <>{children}</> */}
     </Card>
   );
 };

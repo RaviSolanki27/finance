@@ -17,7 +17,6 @@ import {
   ArrowUpDown,
   ChevronDown,
   MoreHorizontal,
-  PlusCircle,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -40,16 +39,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-
 const data: Payment[] = [
   {
     id: "m5gr84i9",
@@ -178,6 +167,7 @@ export function DataTableDemo() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

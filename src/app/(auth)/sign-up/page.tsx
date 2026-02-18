@@ -1,150 +1,185 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
-import * as z from "zod"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, "Bug title must be at least 5 characters.")
-    .max(32, "Bug title must be at most 32 characters."),
-  description: z
-    .string()
-    .min(20, "Description must be at least 20 characters.")
-    .max(100, "Description must be at most 100 characters."),
-})
-
-export default function SignUp() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-    },
+const signUpSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters.").max(60),
+    email: z.string().email("Please enter a valid email address."),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .max(100, "Password must be at most 100 characters."),
+    confirmPassword: z.string(),
   })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
-    })
-  }
+const SignUp = () => {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        }),
+      });
+
+      const data = (await response.json()) as { message?: string };
+
+      if (!response.ok) {
+        throw new Error(data.message ?? "Unable to sign up.");
+      }
+
+      toast.success("Account created successfully");
+      router.push("/dashboard");
+      router.refresh();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to sign up.";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <Card className="w-full sm:max-w-md">
-      <CardHeader>
-        <CardTitle>Bug Report</CardTitle>
-        <CardDescription>
-          Help us improve by reporting bugs you encounter.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <Controller
-              name="title"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-title">
-                    Bug Title
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-rhf-demo-title"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Login button not working on mobile"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="description"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-description">
-                    Description
-                  </FieldLabel>
-                  <InputGroup>
-                    <InputGroupTextarea
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <Card className="w-full sm:max-w-md">
+        <CardHeader>
+          <CardTitle>Create account</CardTitle>
+          <CardDescription>Start managing your money in one place.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            id="sign-up-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
+            <FieldGroup>
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="sign-up-name">Name</FieldLabel>
+                    <Input
                       {...field}
-                      id="form-rhf-demo-description"
-                      placeholder="I'm having an issue with the login button on mobile."
-                      rows={6}
-                      className="min-h-24 resize-none"
+                      id="sign-up-name"
+                      autoComplete="name"
                       aria-invalid={fieldState.invalid}
+                      placeholder="Your name"
                     />
-                    <InputGroupAddon align="block-end">
-                      <InputGroupText className="tabular-nums">
-                        {field.value.length}/100 characters
-                      </InputGroupText>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  <FieldDescription>
-                    Include steps to reproduce, expected behavior, and what
-                    actually happened.
-                  </FieldDescription>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
-        </form>
-      </CardContent>
-      <CardFooter>
-        <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
-            Reset
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id="sign-up-email"
+                      type="email"
+                      autoComplete="email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="you@example.com"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
+                    <Input
+                      {...field}
+                      id="sign-up-password"
+                      type="password"
+                      autoComplete="new-password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Create a password"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="confirmPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="sign-up-confirm-password">
+                      Confirm password
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="sign-up-confirm-password"
+                      type="password"
+                      autoComplete="new-password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Repeat password"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-3">
+          <Button type="submit" form="sign-up-form" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? "Creating account..." : "Create account"}
           </Button>
-          <Button type="submit" form="form-rhf-demo">
-            Submit
-          </Button>
-        </Field>
-      </CardFooter>
-    </Card>
-  )
-}
+          <p className="text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link href="/sign-in" className="font-medium text-foreground underline">
+              Sign in
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+};
+
+export default SignUp;

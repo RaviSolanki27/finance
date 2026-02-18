@@ -5,7 +5,7 @@ import { Pool } from 'pg';
 
 
 // Handle bigint serialization if needed
-export const jsonReplacer = (_key: string, value: any) => {
+export const jsonReplacer = (_key: string, value: unknown) => {
   if (typeof value === "bigint") {
     return value.toString();
   }
@@ -34,7 +34,7 @@ const prisma = globalThis.prisma || (() => {
   return client;
 })();
 
-if (process.env.NEXT_PUBLIC_NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   globalThis.prisma = prisma;
 }
 

@@ -1,7 +1,5 @@
 import React from "react";
 import { Card, CardHeader } from "../ui/card";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import {
   Select,
   SelectContent,

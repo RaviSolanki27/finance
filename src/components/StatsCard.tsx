@@ -10,10 +10,16 @@ const StatsCard = ({
   title = "Total amount",
   redirect = "/dashboard",
 }: IStatsCard) => {
+  const formattedAmount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+  }).format(amount);
+
   return (
     <CommonUrlCard redirect={redirect} title={title}>
       <CardContent className="p-0 flex flex-col gap-4">
-        <span className="text-2xl font-semibold">{amount}</span>
+        <span className="text-2xl font-semibold">{formattedAmount}</span>
         <div className="flex gap-2">
           <Badge variant="success" className="">
             {percentage >= 0 ? `+${percentage}` : `${percentage}`}%

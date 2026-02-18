@@ -1,6 +1,5 @@
 import CommonProgress from "./common/CommonProgress";
 import CommonUrlCard from "./common/CommonUrlCard";
-import { Progress } from "./ui/progress";
 
 const GoalsCard = () => {
   return (

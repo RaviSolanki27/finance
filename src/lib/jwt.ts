@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET || "development-secret-change-me";
 const TOKEN_NAME = "expense-tracker-token";
 
 interface TokenPayload {
@@ -24,7 +24,7 @@ export async function generateToken(payload: TokenPayload): Promise<string> {
 
 export async function verifyToken(token: string) {
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+    const secret = new TextEncoder().encode(JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
     return payload;
     // contains decoded token

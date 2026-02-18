@@ -41,7 +41,7 @@ async function main() {
     },
   });
 
-  const cashAccount = await prisma.account.create({
+  await prisma.account.create({
     data: {
       name: "Cash",
       type: "CASH",

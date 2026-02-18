@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
 import "./globals.css";
-import AppSidebar from "@/components/AppSidebar";
-import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";

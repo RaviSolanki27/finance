@@ -1,5 +1,6 @@
 import CommonAccountCard from "@/components/common/CommonAccountCard";
 import CommonDropdownCard from "@/components/common/CommonDropdownCard";
+import { Button } from "@/components/ui/button";
 
 const Accounts = () => {
   return (
@@ -14,10 +15,16 @@ const Accounts = () => {
               </span>
             </div>
 
-            <div className="flex gap-4">
-              <button>Transfer</button>
-              <button>Request</button>
-              <button>...</button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">
+                Transfer
+              </Button>
+              <Button variant="outline" size="sm">
+                Request
+              </Button>
+              <Button variant="ghost" size="sm">
+                More
+              </Button>
             </div>
           </div>
         </CommonDropdownCard>
@@ -27,9 +34,7 @@ const Accounts = () => {
           totalBalance={12000}
           category="BANK"
           percentage={12}
-        >
-          Hello
-        </CommonAccountCard>
+        />
       </div>
 
       <div></div>
