@@ -22,7 +22,8 @@ export const AccountType = {
   CASH: 'CASH',
   BANK: 'BANK',
   WALLET: 'WALLET',
-  CREDIT: 'CREDIT'
+  CREDIT: 'CREDIT',
+  CREDIT_CARD: 'CREDIT_CARD'
 } as const
 
 export type AccountType = (typeof AccountType)[keyof typeof AccountType]
@@ -37,3 +38,47 @@ export const PaymentMethodType = {
 } as const
 
 export type PaymentMethodType = (typeof PaymentMethodType)[keyof typeof PaymentMethodType]
+
+
+export const RecurringFrequency = {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
+} as const
+
+export type RecurringFrequency = (typeof RecurringFrequency)[keyof typeof RecurringFrequency]
+
+
+export const RecurringStatus = {
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  ENDED: 'ENDED'
+} as const
+
+export type RecurringStatus = (typeof RecurringStatus)[keyof typeof RecurringStatus]
+
+
+export const LoanStatus = {
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED'
+} as const
+
+export type LoanStatus = (typeof LoanStatus)[keyof typeof LoanStatus]
+
+
+export const EmiStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type EmiStatus = (typeof EmiStatus)[keyof typeof EmiStatus]
+
+
+export const NetWorthEntryType = {
+  ASSET: 'ASSET',
+  DEBT: 'DEBT'
+} as const
+
+export type NetWorthEntryType = (typeof NetWorthEntryType)[keyof typeof NetWorthEntryType]

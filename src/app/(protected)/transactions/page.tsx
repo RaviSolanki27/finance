@@ -1,15 +1,12 @@
 "use client";
 
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, PlusCircle } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
+import { useEffect, useMemo, useState } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
-import { DataTableDemo } from "@/components/TransactionTable";
+import { TransactionTable } from "@/components/TransactionTable";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -19,9 +16,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -29,335 +25,280 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchAccounts } from "@/store/slices/accountsSlice";
+import { fetchTransactions } from "@/store/slices/transactionsSlice";
 
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(3, "Name must be at least 3 characters.")
-    .max(150, "Name must be at most 150 characters."),
-  description: z
-    .string()
-    .min(20, "Description must be at least 20 characters.")
-    .max(100, "Description must be at most 100 characters."),
-  type: z.string().nonempty("Please select a transaction type."),
-  category: z.string().nonempty("Please select a transaction category."),
-  account: z.string().nonempty("Please select an account."),
-  method: z.string().nonempty("Please select a payment method."),
-  date: z.date({ error: "Please select a date" }),
-  amount: z
-    .string()
-    .regex(/^\d+$/, "Amount must be a valid number.")
-    .refine((val) => Number(val) >= 1, {
-      message: "Amount must be at least 1.",
-    })
-    .refine((val) => Number(val) <= 100000, {
-      message: "Amount must be less than 100000.",
-    }),
-  time: z
-    .string()
-    .nonempty("Please select a time.")
-    .regex(/^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/, "Invalid time format"),
+const schema = yup.object({
+  type: yup
+    .mixed<"INCOME" | "EXPENSE" | "TRANSFER">()
+    .oneOf(["INCOME", "EXPENSE", "TRANSFER"])
+    .required(),
+  amount: yup.number().moreThan(0).required(),
+  description: yup.string().trim().min(2).max(255).required(),
+  category: yup.string().trim().max(64).optional(),
+  date: yup.date().required(),
+  accountId: yup.string().uuid().required(),
+  destinationAccountId: yup.string().uuid().nullable().optional(),
 });
 
-const getCurrentTime = () => {
-  const now = new Date();
-  return now.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
-const getDefaultValues = (): z.infer<typeof formSchema> => ({
-  title: "",
-  description: "",
-  type: "",
-  amount: "",
-  category: "",
-  account: "",
-  method: "",
-  date: new Date(),
-  time: getCurrentTime(),
-});
-
-const Transactions = () => {
-  const [calendarOpen, setCalendarOpen] = React.useState(false);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: getDefaultValues(),
+export default function TransactionsPage() {
+  const dispatch = useAppDispatch();
+  const { items, pagination } = useAppSelector((state) => state.transactions);
+  const { accounts } = useAppSelector((state) => state.accounts);
+  const [open, setOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    accountId: "",
+    category: "",
+    type: "",
+    dateFrom: "",
+    dateTo: "",
+    sortBy: "date",
+    sortOrder: "desc",
+    page: 1,
+    limit: 20,
   });
 
-  const resetForm = () => {
-    form.reset(getDefaultValues());
-  };
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
+  const query = useMemo(() => {
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== "" && value !== null && value !== undefined) {
+        params.set(key, String(value));
+      }
     });
-  };
+    return params.toString();
+  }, [filters]);
+
+  useEffect(() => {
+    dispatch(fetchAccounts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchTransactions(query));
+  }, [dispatch, query]);
+
+  const formik = useFormik({
+    initialValues: {
+      type: "EXPENSE" as "INCOME" | "EXPENSE" | "TRANSFER",
+      amount: 0,
+      description: "",
+      category: "",
+      date: new Date().toISOString().slice(0, 10),
+      accountId: "",
+      destinationAccountId: "",
+    },
+    validationSchema: schema,
+    onSubmit: async (values, helpers) => {
+      const payload = {
+        ...values,
+        amount: Number(values.amount),
+        date: new Date(values.date).toISOString(),
+        destinationAccountId:
+          values.type === "TRANSFER" ? values.destinationAccountId || null : null,
+      };
+      const response = await fetch("/api/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        helpers.setStatus("Failed to create transaction");
+        return;
+      }
+      helpers.resetForm();
+      setOpen(false);
+      dispatch(fetchTransactions(query));
+      dispatch(fetchAccounts());
+    },
+  });
 
   return (
-    <div>
-      <Dialog
-        open={dialogOpen}
-        onOpenChange={(isOpen) => {
-          setDialogOpen(isOpen);
-          if (!isOpen) resetForm();
-        }}
-      >
-        <DialogTrigger asChild>
-          <Button>
-            <PlusCircle />
-            Add new
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Adding a new transaction</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>Please fill in the form below</DialogDescription>
-          <form
-            id="form-rhf-demo"
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
-          >
-            <FieldGroup className="grid grid-cols-2 gap-4">
-              <Controller
-                name="amount"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-amount">Amount</FieldLabel>
-                    <Input
-                      {...field}
-                      id="form-rhf-demo-amount"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="eg. 10000"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-              <Controller
-                name="type"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-type">Transaction type</FieldLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger id="form-rhf-demo-type">
-                        <SelectValue placeholder="Select a type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="income">Income</SelectItem>
-                        <SelectItem value="expense">Expense</SelectItem>
-                        <SelectItem value="transfer">Transfer</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
+    <section className="space-y-4">
+      <div className="flex flex-wrap gap-2">
+        <Input
+          placeholder="Category"
+          className="w-[180px]"
+          value={filters.category}
+          onChange={(e) => setFilters((prev) => ({ ...prev, category: e.target.value, page: 1 }))}
+        />
+        <Input
+          type="date"
+          value={filters.dateFrom}
+          onChange={(e) => setFilters((prev) => ({ ...prev, dateFrom: e.target.value, page: 1 }))}
+          className="w-[180px]"
+        />
+        <Input
+          type="date"
+          value={filters.dateTo}
+          onChange={(e) => setFilters((prev) => ({ ...prev, dateTo: e.target.value, page: 1 }))}
+          className="w-[180px]"
+        />
+        <Select
+          value={filters.type || "ALL"}
+          onValueChange={(value) =>
+            setFilters((prev) => ({ ...prev, type: value === "ALL" ? "" : value, page: 1 }))
+          }
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Types</SelectItem>
+            <SelectItem value="INCOME">Income</SelectItem>
+            <SelectItem value="EXPENSE">Expense</SelectItem>
+            <SelectItem value="TRANSFER">Transfer</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select
+          value={filters.accountId || "ALL"}
+          onValueChange={(value) =>
+            setFilters((prev) => ({ ...prev, accountId: value === "ALL" ? "" : value, page: 1 }))
+          }
+        >
+          <SelectTrigger className="w-[220px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Accounts</SelectItem>
+            {accounts.map((acc) => (
+              <SelectItem key={acc.id} value={acc.id}>
+                {acc.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="ml-auto">Add Transaction</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>New Transaction</DialogTitle>
+              <DialogDescription>
+                Income, expense, and transfer entries are handled atomically.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={formik.handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label>Type</Label>
+                  <Select
+                    value={formik.values.type}
+                    onValueChange={(value) => formik.setFieldValue("type", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="INCOME">Income</SelectItem>
+                      <SelectItem value="EXPENSE">Expense</SelectItem>
+                      <SelectItem value="TRANSFER">Transfer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="amount">Amount</Label>
+                  <Input id="amount" name="amount" type="number" value={formik.values.amount} onChange={formik.handleChange} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Input id="description" name="description" value={formik.values.description} onChange={formik.handleChange} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Input id="category" name="category" value={formik.values.category} onChange={formik.handleChange} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date</Label>
+                  <Input id="date" name="date" type="date" value={formik.values.date} onChange={formik.handleChange} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Account</Label>
+                <Select
+                  value={formik.values.accountId}
+                  onValueChange={(value) => formik.setFieldValue("accountId", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select source account" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {accounts.map((acc) => (
+                      <SelectItem key={acc.id} value={acc.id}>
+                        {acc.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {formik.values.type === "TRANSFER" ? (
+                <div className="space-y-2">
+                  <Label>Destination Account</Label>
+                  <Select
+                    value={formik.values.destinationAccountId}
+                    onValueChange={(value) => formik.setFieldValue("destinationAccountId", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select destination account" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {accounts
+                        .filter((acc) => acc.id !== formik.values.accountId)
+                        .map((acc) => (
+                          <SelectItem key={acc.id} value={acc.id}>
+                            {acc.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : null}
+              {formik.status ? <p className="text-sm text-rose-500">{formik.status}</p> : null}
+              <DialogFooter>
+                <Button variant="outline" type="button" onClick={() => setOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Save</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
 
-            <FieldGroup>
-              <Controller
-                name="title"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-title">Name</FieldLabel>
-                    <Input
-                      {...field}
-                      id="form-rhf-demo-title"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Name or short description (eg. House rent)"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-
-            <FieldGroup>
-              <Controller
-                name="description"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-description">Description</FieldLabel>
-                    <Input
-                      {...field}
-                      id="form-rhf-demo-description"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Add transaction details"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-
-            <FieldGroup>
-              <Controller
-                name="category"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-category">Category</FieldLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger id="form-rhf-demo-category">
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="shopping">Shopping</SelectItem>
-                        <SelectItem value="salary">Salary</SelectItem>
-                        <SelectItem value="subscription">Subscription</SelectItem>
-                        <SelectItem value="bills">Bills</SelectItem>
-                        <SelectItem value="rent">Rent</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-
-            <FieldGroup className="grid grid-cols-2 gap-4">
-              <Controller
-                name="account"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-account">Account</FieldLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger id="form-rhf-demo-account">
-                        <SelectValue placeholder="Select an account" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="hdfc">HDFC bank</SelectItem>
-                        <SelectItem value="icici">ICICI bank</SelectItem>
-                        <SelectItem value="bob">Bank of Baroda</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-              <Controller
-                name="method"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-method">Payment method</FieldLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger id="form-rhf-demo-method">
-                        <SelectValue placeholder="Select a method" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="upi">UPI</SelectItem>
-                        <SelectItem value="cash">Cash</SelectItem>
-                        <SelectItem value="credit_card">Credit Card</SelectItem>
-                        <SelectItem value="debit_card">Debit Card</SelectItem>
-                        <SelectItem value="wallet">Wallet</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-
-            <FieldGroup className="grid grid-cols-2 gap-4">
-              <Controller
-                name="date"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel>Date</FieldLabel>
-                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal"
-                        >
-                          {field.value ? field.value.toDateString() : "Pick a date"}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={(date) => {
-                            field.onChange(date);
-                            setCalendarOpen(false);
-                          }}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-              <Controller
-                name="time"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-demo-time">Time</FieldLabel>
-                    <Input
-                      {...field}
-                      type="time"
-                      id="form-rhf-demo-time"
-                      step="60"
-                      aria-invalid={fieldState.invalid}
-                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-          </form>
-          <DialogFooter className="mt-5">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Transactions</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Page {pagination.page} of {Math.max(pagination.totalPages, 1)}
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <TransactionTable rows={items} />
+          <div className="flex justify-end gap-2">
             <Button
-              type="button"
               variant="outline"
-              onClick={() => {
-                setDialogOpen(false);
-                resetForm();
-              }}
+              disabled={pagination.page <= 1}
+              onClick={() => setFilters((prev) => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
             >
-              Cancel
+              Previous
             </Button>
-            <Button type="submit" form="form-rhf-demo">
-              Add new transaction
+            <Button
+              variant="outline"
+              disabled={pagination.page >= pagination.totalPages}
+              onClick={() =>
+                setFilters((prev) => ({
+                  ...prev,
+                  page: Math.min(pagination.totalPages || 1, prev.page + 1),
+                }))
+              }
+            >
+              Next
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <DataTableDemo />
-    </div>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
   );
-};
-
-export default Transactions;
+}

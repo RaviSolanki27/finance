@@ -45,6 +45,11 @@ export type TransactionMinAggregateOutputType = {
   accountId: string | null
   paymentMethodId: string | null
   transferId: string | null
+  transferGroupId: string | null
+  sourceAccountId: string | null
+  destinationAccountId: string | null
+  isRecurringGenerated: boolean | null
+  recurringTransactionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +65,11 @@ export type TransactionMaxAggregateOutputType = {
   accountId: string | null
   paymentMethodId: string | null
   transferId: string | null
+  transferGroupId: string | null
+  sourceAccountId: string | null
+  destinationAccountId: string | null
+  isRecurringGenerated: boolean | null
+  recurringTransactionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -75,6 +85,11 @@ export type TransactionCountAggregateOutputType = {
   accountId: number
   paymentMethodId: number
   transferId: number
+  transferGroupId: number
+  sourceAccountId: number
+  destinationAccountId: number
+  isRecurringGenerated: number
+  recurringTransactionId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -100,6 +115,11 @@ export type TransactionMinAggregateInputType = {
   accountId?: true
   paymentMethodId?: true
   transferId?: true
+  transferGroupId?: true
+  sourceAccountId?: true
+  destinationAccountId?: true
+  isRecurringGenerated?: true
+  recurringTransactionId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -115,6 +135,11 @@ export type TransactionMaxAggregateInputType = {
   accountId?: true
   paymentMethodId?: true
   transferId?: true
+  transferGroupId?: true
+  sourceAccountId?: true
+  destinationAccountId?: true
+  isRecurringGenerated?: true
+  recurringTransactionId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -130,6 +155,11 @@ export type TransactionCountAggregateInputType = {
   accountId?: true
   paymentMethodId?: true
   transferId?: true
+  transferGroupId?: true
+  sourceAccountId?: true
+  destinationAccountId?: true
+  isRecurringGenerated?: true
+  recurringTransactionId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -230,8 +260,13 @@ export type TransactionGroupByOutputType = {
   date: Date
   userId: string
   accountId: string
-  paymentMethodId: string
+  paymentMethodId: string | null
   transferId: string | null
+  transferGroupId: string | null
+  sourceAccountId: string | null
+  destinationAccountId: string | null
+  isRecurringGenerated: boolean
+  recurringTransactionId: string | null
   createdAt: Date
   updatedAt: Date
   _count: TransactionCountAggregateOutputType | null
@@ -268,13 +303,24 @@ export type TransactionWhereInput = {
   date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   userId?: Prisma.StringFilter<"Transaction"> | string
   accountId?: Prisma.StringFilter<"Transaction"> | string
-  paymentMethodId?: Prisma.StringFilter<"Transaction"> | string
+  paymentMethodId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transferId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  transferGroupId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  sourceAccountId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  destinationAccountId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  isRecurringGenerated?: Prisma.BoolFilter<"Transaction"> | boolean
+  recurringTransactionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
-  paymentMethod?: Prisma.XOR<Prisma.PaymentMethodScalarRelationFilter, Prisma.PaymentMethodWhereInput>
+  paymentMethod?: Prisma.XOR<Prisma.PaymentMethodNullableScalarRelationFilter, Prisma.PaymentMethodWhereInput> | null
+  sourceAccount?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
+  destinationAccount?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
+  recurringTransaction?: Prisma.XOR<Prisma.RecurringTransactionNullableScalarRelationFilter, Prisma.RecurringTransactionWhereInput> | null
+  tags?: Prisma.TransactionTagOnTransactionListRelationFilter
+  emiSchedule?: Prisma.XOR<Prisma.EmiScheduleNullableScalarRelationFilter, Prisma.EmiScheduleWhereInput> | null
+  loanPrepayment?: Prisma.XOR<Prisma.LoanPrepaymentNullableScalarRelationFilter, Prisma.LoanPrepaymentWhereInput> | null
 }
 
 export type TransactionOrderByWithRelationInput = {
@@ -286,13 +332,24 @@ export type TransactionOrderByWithRelationInput = {
   date?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
-  paymentMethodId?: Prisma.SortOrder
+  paymentMethodId?: Prisma.SortOrderInput | Prisma.SortOrder
   transferId?: Prisma.SortOrderInput | Prisma.SortOrder
+  transferGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  destinationAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRecurringGenerated?: Prisma.SortOrder
+  recurringTransactionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   account?: Prisma.AccountOrderByWithRelationInput
   paymentMethod?: Prisma.PaymentMethodOrderByWithRelationInput
+  sourceAccount?: Prisma.AccountOrderByWithRelationInput
+  destinationAccount?: Prisma.AccountOrderByWithRelationInput
+  recurringTransaction?: Prisma.RecurringTransactionOrderByWithRelationInput
+  tags?: Prisma.TransactionTagOnTransactionOrderByRelationAggregateInput
+  emiSchedule?: Prisma.EmiScheduleOrderByWithRelationInput
+  loanPrepayment?: Prisma.LoanPrepaymentOrderByWithRelationInput
 }
 
 export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -307,13 +364,24 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   userId?: Prisma.StringFilter<"Transaction"> | string
   accountId?: Prisma.StringFilter<"Transaction"> | string
-  paymentMethodId?: Prisma.StringFilter<"Transaction"> | string
+  paymentMethodId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transferId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  transferGroupId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  sourceAccountId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  destinationAccountId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  isRecurringGenerated?: Prisma.BoolFilter<"Transaction"> | boolean
+  recurringTransactionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
-  paymentMethod?: Prisma.XOR<Prisma.PaymentMethodScalarRelationFilter, Prisma.PaymentMethodWhereInput>
+  paymentMethod?: Prisma.XOR<Prisma.PaymentMethodNullableScalarRelationFilter, Prisma.PaymentMethodWhereInput> | null
+  sourceAccount?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
+  destinationAccount?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
+  recurringTransaction?: Prisma.XOR<Prisma.RecurringTransactionNullableScalarRelationFilter, Prisma.RecurringTransactionWhereInput> | null
+  tags?: Prisma.TransactionTagOnTransactionListRelationFilter
+  emiSchedule?: Prisma.XOR<Prisma.EmiScheduleNullableScalarRelationFilter, Prisma.EmiScheduleWhereInput> | null
+  loanPrepayment?: Prisma.XOR<Prisma.LoanPrepaymentNullableScalarRelationFilter, Prisma.LoanPrepaymentWhereInput> | null
 }, "id">
 
 export type TransactionOrderByWithAggregationInput = {
@@ -325,8 +393,13 @@ export type TransactionOrderByWithAggregationInput = {
   date?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
-  paymentMethodId?: Prisma.SortOrder
+  paymentMethodId?: Prisma.SortOrderInput | Prisma.SortOrder
   transferId?: Prisma.SortOrderInput | Prisma.SortOrder
+  transferGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  destinationAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRecurringGenerated?: Prisma.SortOrder
+  recurringTransactionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TransactionCountOrderByAggregateInput
@@ -348,8 +421,13 @@ export type TransactionScalarWhereWithAggregatesInput = {
   date?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   userId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   accountId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
-  paymentMethodId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
+  paymentMethodId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   transferId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  transferGroupId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  sourceAccountId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  destinationAccountId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  isRecurringGenerated?: Prisma.BoolWithAggregatesFilter<"Transaction"> | boolean
+  recurringTransactionId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
 }
@@ -362,11 +440,19 @@ export type TransactionCreateInput = {
   category?: string | null
   date?: Date | string
   transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
-  paymentMethod: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateInput = {
@@ -378,10 +464,18 @@ export type TransactionUncheckedCreateInput = {
   date?: Date | string
   userId: string
   accountId: string
-  paymentMethodId: string
+  paymentMethodId?: string | null
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionUpdateInput = {
@@ -392,11 +486,19 @@ export type TransactionUpdateInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
-  paymentMethod?: Prisma.PaymentMethodUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateInput = {
@@ -408,10 +510,18 @@ export type TransactionUncheckedUpdateInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentMethodId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionCreateManyInput = {
@@ -423,8 +533,13 @@ export type TransactionCreateManyInput = {
   date?: Date | string
   userId: string
   accountId: string
-  paymentMethodId: string
+  paymentMethodId?: string | null
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -437,6 +552,8 @@ export type TransactionUpdateManyMutationInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -450,8 +567,13 @@ export type TransactionUncheckedUpdateManyInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentMethodId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -477,6 +599,11 @@ export type TransactionCountOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   paymentMethodId?: Prisma.SortOrder
   transferId?: Prisma.SortOrder
+  transferGroupId?: Prisma.SortOrder
+  sourceAccountId?: Prisma.SortOrder
+  destinationAccountId?: Prisma.SortOrder
+  isRecurringGenerated?: Prisma.SortOrder
+  recurringTransactionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -496,6 +623,11 @@ export type TransactionMaxOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   paymentMethodId?: Prisma.SortOrder
   transferId?: Prisma.SortOrder
+  transferGroupId?: Prisma.SortOrder
+  sourceAccountId?: Prisma.SortOrder
+  destinationAccountId?: Prisma.SortOrder
+  isRecurringGenerated?: Prisma.SortOrder
+  recurringTransactionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -511,12 +643,27 @@ export type TransactionMinOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   paymentMethodId?: Prisma.SortOrder
   transferId?: Prisma.SortOrder
+  transferGroupId?: Prisma.SortOrder
+  sourceAccountId?: Prisma.SortOrder
+  destinationAccountId?: Prisma.SortOrder
+  isRecurringGenerated?: Prisma.SortOrder
+  recurringTransactionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type TransactionSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+}
+
+export type TransactionNullableScalarRelationFilter = {
+  is?: Prisma.TransactionWhereInput | null
+  isNot?: Prisma.TransactionWhereInput | null
+}
+
+export type TransactionScalarRelationFilter = {
+  is?: Prisma.TransactionWhereInput
+  isNot?: Prisma.TransactionWhereInput
 }
 
 export type TransactionCreateNestedManyWithoutUserInput = {
@@ -568,10 +715,38 @@ export type TransactionCreateNestedManyWithoutAccountInput = {
   connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
 }
 
+export type TransactionCreateNestedManyWithoutSourceAccountInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSourceAccountInput, Prisma.TransactionUncheckedCreateWithoutSourceAccountInput> | Prisma.TransactionCreateWithoutSourceAccountInput[] | Prisma.TransactionUncheckedCreateWithoutSourceAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSourceAccountInput | Prisma.TransactionCreateOrConnectWithoutSourceAccountInput[]
+  createMany?: Prisma.TransactionCreateManySourceAccountInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionCreateNestedManyWithoutDestinationAccountInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutDestinationAccountInput, Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput> | Prisma.TransactionCreateWithoutDestinationAccountInput[] | Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput | Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput[]
+  createMany?: Prisma.TransactionCreateManyDestinationAccountInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
 export type TransactionUncheckedCreateNestedManyWithoutAccountInput = {
   create?: Prisma.XOR<Prisma.TransactionCreateWithoutAccountInput, Prisma.TransactionUncheckedCreateWithoutAccountInput> | Prisma.TransactionCreateWithoutAccountInput[] | Prisma.TransactionUncheckedCreateWithoutAccountInput[]
   connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutAccountInput | Prisma.TransactionCreateOrConnectWithoutAccountInput[]
   createMany?: Prisma.TransactionCreateManyAccountInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutSourceAccountInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSourceAccountInput, Prisma.TransactionUncheckedCreateWithoutSourceAccountInput> | Prisma.TransactionCreateWithoutSourceAccountInput[] | Prisma.TransactionUncheckedCreateWithoutSourceAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSourceAccountInput | Prisma.TransactionCreateOrConnectWithoutSourceAccountInput[]
+  createMany?: Prisma.TransactionCreateManySourceAccountInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutDestinationAccountInput, Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput> | Prisma.TransactionCreateWithoutDestinationAccountInput[] | Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput | Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput[]
+  createMany?: Prisma.TransactionCreateManyDestinationAccountInputEnvelope
   connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
 }
 
@@ -589,6 +764,34 @@ export type TransactionUpdateManyWithoutAccountNestedInput = {
   deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
 }
 
+export type TransactionUpdateManyWithoutSourceAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSourceAccountInput, Prisma.TransactionUncheckedCreateWithoutSourceAccountInput> | Prisma.TransactionCreateWithoutSourceAccountInput[] | Prisma.TransactionUncheckedCreateWithoutSourceAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSourceAccountInput | Prisma.TransactionCreateOrConnectWithoutSourceAccountInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutSourceAccountInput | Prisma.TransactionUpsertWithWhereUniqueWithoutSourceAccountInput[]
+  createMany?: Prisma.TransactionCreateManySourceAccountInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutSourceAccountInput | Prisma.TransactionUpdateWithWhereUniqueWithoutSourceAccountInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutSourceAccountInput | Prisma.TransactionUpdateManyWithWhereWithoutSourceAccountInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUpdateManyWithoutDestinationAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutDestinationAccountInput, Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput> | Prisma.TransactionCreateWithoutDestinationAccountInput[] | Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput | Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutDestinationAccountInput | Prisma.TransactionUpsertWithWhereUniqueWithoutDestinationAccountInput[]
+  createMany?: Prisma.TransactionCreateManyDestinationAccountInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutDestinationAccountInput | Prisma.TransactionUpdateWithWhereUniqueWithoutDestinationAccountInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutDestinationAccountInput | Prisma.TransactionUpdateManyWithWhereWithoutDestinationAccountInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
 export type TransactionUncheckedUpdateManyWithoutAccountNestedInput = {
   create?: Prisma.XOR<Prisma.TransactionCreateWithoutAccountInput, Prisma.TransactionUncheckedCreateWithoutAccountInput> | Prisma.TransactionCreateWithoutAccountInput[] | Prisma.TransactionUncheckedCreateWithoutAccountInput[]
   connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutAccountInput | Prisma.TransactionCreateOrConnectWithoutAccountInput[]
@@ -600,6 +803,34 @@ export type TransactionUncheckedUpdateManyWithoutAccountNestedInput = {
   connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
   update?: Prisma.TransactionUpdateWithWhereUniqueWithoutAccountInput | Prisma.TransactionUpdateWithWhereUniqueWithoutAccountInput[]
   updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutAccountInput | Prisma.TransactionUpdateManyWithWhereWithoutAccountInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutSourceAccountInput, Prisma.TransactionUncheckedCreateWithoutSourceAccountInput> | Prisma.TransactionCreateWithoutSourceAccountInput[] | Prisma.TransactionUncheckedCreateWithoutSourceAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSourceAccountInput | Prisma.TransactionCreateOrConnectWithoutSourceAccountInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutSourceAccountInput | Prisma.TransactionUpsertWithWhereUniqueWithoutSourceAccountInput[]
+  createMany?: Prisma.TransactionCreateManySourceAccountInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutSourceAccountInput | Prisma.TransactionUpdateWithWhereUniqueWithoutSourceAccountInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutSourceAccountInput | Prisma.TransactionUpdateManyWithWhereWithoutSourceAccountInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutDestinationAccountInput, Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput> | Prisma.TransactionCreateWithoutDestinationAccountInput[] | Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput | Prisma.TransactionCreateOrConnectWithoutDestinationAccountInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutDestinationAccountInput | Prisma.TransactionUpsertWithWhereUniqueWithoutDestinationAccountInput[]
+  createMany?: Prisma.TransactionCreateManyDestinationAccountInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutDestinationAccountInput | Prisma.TransactionUpdateWithWhereUniqueWithoutDestinationAccountInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutDestinationAccountInput | Prisma.TransactionUpdateManyWithWhereWithoutDestinationAccountInput[]
   deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
 }
 
@@ -649,6 +880,94 @@ export type EnumTransactionTypeFieldUpdateOperationsInput = {
   set?: $Enums.TransactionType
 }
 
+export type TransactionCreateNestedManyWithoutRecurringTransactionInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput> | Prisma.TransactionCreateWithoutRecurringTransactionInput[] | Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput | Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput[]
+  createMany?: Prisma.TransactionCreateManyRecurringTransactionInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutRecurringTransactionInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput> | Prisma.TransactionCreateWithoutRecurringTransactionInput[] | Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput | Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput[]
+  createMany?: Prisma.TransactionCreateManyRecurringTransactionInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUpdateManyWithoutRecurringTransactionNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput> | Prisma.TransactionCreateWithoutRecurringTransactionInput[] | Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput | Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutRecurringTransactionInput | Prisma.TransactionUpsertWithWhereUniqueWithoutRecurringTransactionInput[]
+  createMany?: Prisma.TransactionCreateManyRecurringTransactionInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutRecurringTransactionInput | Prisma.TransactionUpdateWithWhereUniqueWithoutRecurringTransactionInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutRecurringTransactionInput | Prisma.TransactionUpdateManyWithWhereWithoutRecurringTransactionInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutRecurringTransactionNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput> | Prisma.TransactionCreateWithoutRecurringTransactionInput[] | Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput | Prisma.TransactionCreateOrConnectWithoutRecurringTransactionInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutRecurringTransactionInput | Prisma.TransactionUpsertWithWhereUniqueWithoutRecurringTransactionInput[]
+  createMany?: Prisma.TransactionCreateManyRecurringTransactionInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutRecurringTransactionInput | Prisma.TransactionUpdateWithWhereUniqueWithoutRecurringTransactionInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutRecurringTransactionInput | Prisma.TransactionUpdateManyWithWhereWithoutRecurringTransactionInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionCreateNestedOneWithoutEmiScheduleInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutEmiScheduleInput, Prisma.TransactionUncheckedCreateWithoutEmiScheduleInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutEmiScheduleInput
+  connect?: Prisma.TransactionWhereUniqueInput
+}
+
+export type TransactionUpdateOneWithoutEmiScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutEmiScheduleInput, Prisma.TransactionUncheckedCreateWithoutEmiScheduleInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutEmiScheduleInput
+  upsert?: Prisma.TransactionUpsertWithoutEmiScheduleInput
+  disconnect?: Prisma.TransactionWhereInput | boolean
+  delete?: Prisma.TransactionWhereInput | boolean
+  connect?: Prisma.TransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionUpdateToOneWithWhereWithoutEmiScheduleInput, Prisma.TransactionUpdateWithoutEmiScheduleInput>, Prisma.TransactionUncheckedUpdateWithoutEmiScheduleInput>
+}
+
+export type TransactionCreateNestedOneWithoutLoanPrepaymentInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutLoanPrepaymentInput, Prisma.TransactionUncheckedCreateWithoutLoanPrepaymentInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutLoanPrepaymentInput
+  connect?: Prisma.TransactionWhereUniqueInput
+}
+
+export type TransactionUpdateOneWithoutLoanPrepaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutLoanPrepaymentInput, Prisma.TransactionUncheckedCreateWithoutLoanPrepaymentInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutLoanPrepaymentInput
+  upsert?: Prisma.TransactionUpsertWithoutLoanPrepaymentInput
+  disconnect?: Prisma.TransactionWhereInput | boolean
+  delete?: Prisma.TransactionWhereInput | boolean
+  connect?: Prisma.TransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionUpdateToOneWithWhereWithoutLoanPrepaymentInput, Prisma.TransactionUpdateWithoutLoanPrepaymentInput>, Prisma.TransactionUncheckedUpdateWithoutLoanPrepaymentInput>
+}
+
+export type TransactionCreateNestedOneWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutTagsInput, Prisma.TransactionUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutTagsInput
+  connect?: Prisma.TransactionWhereUniqueInput
+}
+
+export type TransactionUpdateOneRequiredWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutTagsInput, Prisma.TransactionUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutTagsInput
+  upsert?: Prisma.TransactionUpsertWithoutTagsInput
+  connect?: Prisma.TransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionUpdateToOneWithWhereWithoutTagsInput, Prisma.TransactionUpdateWithoutTagsInput>, Prisma.TransactionUncheckedUpdateWithoutTagsInput>
+}
+
 export type TransactionCreateWithoutUserInput = {
   id?: string
   description: string
@@ -657,10 +976,18 @@ export type TransactionCreateWithoutUserInput = {
   category?: string | null
   date?: Date | string
   transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
-  paymentMethod: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutUserInput = {
@@ -671,10 +998,18 @@ export type TransactionUncheckedCreateWithoutUserInput = {
   category?: string | null
   date?: Date | string
   accountId: string
-  paymentMethodId: string
+  paymentMethodId?: string | null
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutUserInput = {
@@ -715,8 +1050,13 @@ export type TransactionScalarWhereInput = {
   date?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   userId?: Prisma.StringFilter<"Transaction"> | string
   accountId?: Prisma.StringFilter<"Transaction"> | string
-  paymentMethodId?: Prisma.StringFilter<"Transaction"> | string
+  paymentMethodId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transferId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  transferGroupId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  sourceAccountId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  destinationAccountId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  isRecurringGenerated?: Prisma.BoolFilter<"Transaction"> | boolean
+  recurringTransactionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
 }
@@ -729,10 +1069,18 @@ export type TransactionCreateWithoutAccountInput = {
   category?: string | null
   date?: Date | string
   transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
-  paymentMethod: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutAccountInput = {
@@ -743,10 +1091,18 @@ export type TransactionUncheckedCreateWithoutAccountInput = {
   category?: string | null
   date?: Date | string
   userId: string
-  paymentMethodId: string
+  paymentMethodId?: string | null
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutAccountInput = {
@@ -756,6 +1112,114 @@ export type TransactionCreateOrConnectWithoutAccountInput = {
 
 export type TransactionCreateManyAccountInputEnvelope = {
   data: Prisma.TransactionCreateManyAccountInput | Prisma.TransactionCreateManyAccountInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionCreateWithoutSourceAccountInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutSourceAccountInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutSourceAccountInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutSourceAccountInput, Prisma.TransactionUncheckedCreateWithoutSourceAccountInput>
+}
+
+export type TransactionCreateManySourceAccountInputEnvelope = {
+  data: Prisma.TransactionCreateManySourceAccountInput | Prisma.TransactionCreateManySourceAccountInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionCreateWithoutDestinationAccountInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutDestinationAccountInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutDestinationAccountInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutDestinationAccountInput, Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput>
+}
+
+export type TransactionCreateManyDestinationAccountInputEnvelope = {
+  data: Prisma.TransactionCreateManyDestinationAccountInput | Prisma.TransactionCreateManyDestinationAccountInput[]
   skipDuplicates?: boolean
 }
 
@@ -775,6 +1239,38 @@ export type TransactionUpdateManyWithWhereWithoutAccountInput = {
   data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutAccountInput>
 }
 
+export type TransactionUpsertWithWhereUniqueWithoutSourceAccountInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutSourceAccountInput, Prisma.TransactionUncheckedUpdateWithoutSourceAccountInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutSourceAccountInput, Prisma.TransactionUncheckedCreateWithoutSourceAccountInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutSourceAccountInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutSourceAccountInput, Prisma.TransactionUncheckedUpdateWithoutSourceAccountInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutSourceAccountInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountInput>
+}
+
+export type TransactionUpsertWithWhereUniqueWithoutDestinationAccountInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutDestinationAccountInput, Prisma.TransactionUncheckedUpdateWithoutDestinationAccountInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutDestinationAccountInput, Prisma.TransactionUncheckedCreateWithoutDestinationAccountInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutDestinationAccountInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutDestinationAccountInput, Prisma.TransactionUncheckedUpdateWithoutDestinationAccountInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutDestinationAccountInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountInput>
+}
+
 export type TransactionCreateWithoutPaymentMethodInput = {
   id?: string
   description: string
@@ -783,10 +1279,18 @@ export type TransactionCreateWithoutPaymentMethodInput = {
   category?: string | null
   date?: Date | string
   transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutPaymentMethodInput = {
@@ -799,8 +1303,16 @@ export type TransactionUncheckedCreateWithoutPaymentMethodInput = {
   userId: string
   accountId: string
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutPaymentMethodInput = {
@@ -829,6 +1341,388 @@ export type TransactionUpdateManyWithWhereWithoutPaymentMethodInput = {
   data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutPaymentMethodInput>
 }
 
+export type TransactionCreateWithoutRecurringTransactionInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutRecurringTransactionInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutRecurringTransactionInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput>
+}
+
+export type TransactionCreateManyRecurringTransactionInputEnvelope = {
+  data: Prisma.TransactionCreateManyRecurringTransactionInput | Prisma.TransactionCreateManyRecurringTransactionInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionUpsertWithWhereUniqueWithoutRecurringTransactionInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedUpdateWithoutRecurringTransactionInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedCreateWithoutRecurringTransactionInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutRecurringTransactionInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutRecurringTransactionInput, Prisma.TransactionUncheckedUpdateWithoutRecurringTransactionInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutRecurringTransactionInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutRecurringTransactionInput>
+}
+
+export type TransactionCreateWithoutEmiScheduleInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutEmiScheduleInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutEmiScheduleInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutEmiScheduleInput, Prisma.TransactionUncheckedCreateWithoutEmiScheduleInput>
+}
+
+export type TransactionUpsertWithoutEmiScheduleInput = {
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutEmiScheduleInput, Prisma.TransactionUncheckedUpdateWithoutEmiScheduleInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutEmiScheduleInput, Prisma.TransactionUncheckedCreateWithoutEmiScheduleInput>
+  where?: Prisma.TransactionWhereInput
+}
+
+export type TransactionUpdateToOneWithWhereWithoutEmiScheduleInput = {
+  where?: Prisma.TransactionWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutEmiScheduleInput, Prisma.TransactionUncheckedUpdateWithoutEmiScheduleInput>
+}
+
+export type TransactionUpdateWithoutEmiScheduleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutEmiScheduleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionCreateWithoutLoanPrepaymentInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  tags?: Prisma.TransactionTagOnTransactionCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutLoanPrepaymentInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedCreateNestedManyWithoutTransactionInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutLoanPrepaymentInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutLoanPrepaymentInput, Prisma.TransactionUncheckedCreateWithoutLoanPrepaymentInput>
+}
+
+export type TransactionUpsertWithoutLoanPrepaymentInput = {
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutLoanPrepaymentInput, Prisma.TransactionUncheckedUpdateWithoutLoanPrepaymentInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutLoanPrepaymentInput, Prisma.TransactionUncheckedCreateWithoutLoanPrepaymentInput>
+  where?: Prisma.TransactionWhereInput
+}
+
+export type TransactionUpdateToOneWithWhereWithoutLoanPrepaymentInput = {
+  where?: Prisma.TransactionWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutLoanPrepaymentInput, Prisma.TransactionUncheckedUpdateWithoutLoanPrepaymentInput>
+}
+
+export type TransactionUpdateWithoutLoanPrepaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutLoanPrepaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionCreateWithoutTagsInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  transferId?: string | null
+  transferGroupId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  paymentMethod?: Prisma.PaymentMethodCreateNestedOneWithoutTransactionsInput
+  sourceAccount?: Prisma.AccountCreateNestedOneWithoutTransferSourceTransactionsInput
+  destinationAccount?: Prisma.AccountCreateNestedOneWithoutTransferDestinationTransactionsInput
+  recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutGeneratedTransactionsInput
+  emiSchedule?: Prisma.EmiScheduleCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutTagsInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  emiSchedule?: Prisma.EmiScheduleUncheckedCreateNestedOneWithoutTransactionInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedCreateNestedOneWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutTagsInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutTagsInput, Prisma.TransactionUncheckedCreateWithoutTagsInput>
+}
+
+export type TransactionUpsertWithoutTagsInput = {
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutTagsInput, Prisma.TransactionUncheckedUpdateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutTagsInput, Prisma.TransactionUncheckedCreateWithoutTagsInput>
+  where?: Prisma.TransactionWhereInput
+}
+
+export type TransactionUpdateToOneWithWhereWithoutTagsInput = {
+  where?: Prisma.TransactionWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutTagsInput, Prisma.TransactionUncheckedUpdateWithoutTagsInput>
+}
+
+export type TransactionUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
+}
+
 export type TransactionCreateManyUserInput = {
   id?: string
   description: string
@@ -837,8 +1731,13 @@ export type TransactionCreateManyUserInput = {
   category?: string | null
   date?: Date | string
   accountId: string
-  paymentMethodId: string
+  paymentMethodId?: string | null
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -851,10 +1750,18 @@ export type TransactionUpdateWithoutUserInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
-  paymentMethod?: Prisma.PaymentMethodUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutUserInput = {
@@ -865,10 +1772,18 @@ export type TransactionUncheckedUpdateWithoutUserInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentMethodId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateManyWithoutUserInput = {
@@ -879,8 +1794,13 @@ export type TransactionUncheckedUpdateManyWithoutUserInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentMethodId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -893,8 +1813,51 @@ export type TransactionCreateManyAccountInput = {
   category?: string | null
   date?: Date | string
   userId: string
-  paymentMethodId: string
+  paymentMethodId?: string | null
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TransactionCreateManySourceAccountInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TransactionCreateManyDestinationAccountInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -907,10 +1870,18 @@ export type TransactionUpdateWithoutAccountInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
-  paymentMethod?: Prisma.PaymentMethodUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutAccountInput = {
@@ -921,10 +1892,18 @@ export type TransactionUncheckedUpdateWithoutAccountInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentMethodId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateManyWithoutAccountInput = {
@@ -935,8 +1914,139 @@ export type TransactionUncheckedUpdateManyWithoutAccountInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentMethodId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransactionUpdateWithoutSourceAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutSourceAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateManyWithoutSourceAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransactionUpdateWithoutDestinationAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutDestinationAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateManyWithoutDestinationAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -951,6 +2061,11 @@ export type TransactionCreateManyPaymentMethodInput = {
   userId: string
   accountId: string
   transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -963,10 +2078,18 @@ export type TransactionUpdateWithoutPaymentMethodInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutGeneratedTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutPaymentMethodInput = {
@@ -979,8 +2102,16 @@ export type TransactionUncheckedUpdateWithoutPaymentMethodInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateManyWithoutPaymentMethodInput = {
@@ -993,10 +2124,126 @@ export type TransactionUncheckedUpdateManyWithoutPaymentMethodInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
   transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type TransactionCreateManyRecurringTransactionInput = {
+  id?: string
+  description: string
+  amount: number
+  type: $Enums.TransactionType
+  category?: string | null
+  date?: Date | string
+  userId: string
+  accountId: string
+  paymentMethodId?: string | null
+  transferId?: string | null
+  transferGroupId?: string | null
+  sourceAccountId?: string | null
+  destinationAccountId?: string | null
+  isRecurringGenerated?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TransactionUpdateWithoutRecurringTransactionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  paymentMethod?: Prisma.PaymentMethodUpdateOneWithoutTransactionsNestedInput
+  sourceAccount?: Prisma.AccountUpdateOneWithoutTransferSourceTransactionsNestedInput
+  destinationAccount?: Prisma.AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput
+  tags?: Prisma.TransactionTagOnTransactionUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutRecurringTransactionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TransactionTagOnTransactionUncheckedUpdateManyWithoutTransactionNestedInput
+  emiSchedule?: Prisma.EmiScheduleUncheckedUpdateOneWithoutTransactionNestedInput
+  loanPrepayment?: Prisma.LoanPrepaymentUncheckedUpdateOneWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateManyWithoutRecurringTransactionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentMethodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  destinationAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRecurringGenerated?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type TransactionCountOutputType
+ */
+
+export type TransactionCountOutputType = {
+  tags: number
+}
+
+export type TransactionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tags?: boolean | TransactionCountOutputTypeCountTagsArgs
+}
+
+/**
+ * TransactionCountOutputType without action
+ */
+export type TransactionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransactionCountOutputType
+   */
+  select?: Prisma.TransactionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TransactionCountOutputType without action
+ */
+export type TransactionCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransactionTagOnTransactionWhereInput
+}
 
 
 export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1010,11 +2257,23 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   accountId?: boolean
   paymentMethodId?: boolean
   transferId?: boolean
+  transferGroupId?: boolean
+  sourceAccountId?: boolean
+  destinationAccountId?: boolean
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  paymentMethod?: boolean | Prisma.PaymentMethodDefaultArgs<ExtArgs>
+  paymentMethod?: boolean | Prisma.Transaction$paymentMethodArgs<ExtArgs>
+  sourceAccount?: boolean | Prisma.Transaction$sourceAccountArgs<ExtArgs>
+  destinationAccount?: boolean | Prisma.Transaction$destinationAccountArgs<ExtArgs>
+  recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
+  tags?: boolean | Prisma.Transaction$tagsArgs<ExtArgs>
+  emiSchedule?: boolean | Prisma.Transaction$emiScheduleArgs<ExtArgs>
+  loanPrepayment?: boolean | Prisma.Transaction$loanPrepaymentArgs<ExtArgs>
+  _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1028,11 +2287,19 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   accountId?: boolean
   paymentMethodId?: boolean
   transferId?: boolean
+  transferGroupId?: boolean
+  sourceAccountId?: boolean
+  destinationAccountId?: boolean
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  paymentMethod?: boolean | Prisma.PaymentMethodDefaultArgs<ExtArgs>
+  paymentMethod?: boolean | Prisma.Transaction$paymentMethodArgs<ExtArgs>
+  sourceAccount?: boolean | Prisma.Transaction$sourceAccountArgs<ExtArgs>
+  destinationAccount?: boolean | Prisma.Transaction$destinationAccountArgs<ExtArgs>
+  recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1046,11 +2313,19 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   accountId?: boolean
   paymentMethodId?: boolean
   transferId?: boolean
+  transferGroupId?: boolean
+  sourceAccountId?: boolean
+  destinationAccountId?: boolean
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  paymentMethod?: boolean | Prisma.PaymentMethodDefaultArgs<ExtArgs>
+  paymentMethod?: boolean | Prisma.Transaction$paymentMethodArgs<ExtArgs>
+  sourceAccount?: boolean | Prisma.Transaction$sourceAccountArgs<ExtArgs>
+  destinationAccount?: boolean | Prisma.Transaction$destinationAccountArgs<ExtArgs>
+  recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectScalar = {
@@ -1064,25 +2339,43 @@ export type TransactionSelectScalar = {
   accountId?: boolean
   paymentMethodId?: boolean
   transferId?: boolean
+  transferGroupId?: boolean
+  sourceAccountId?: boolean
+  destinationAccountId?: boolean
+  isRecurringGenerated?: boolean
+  recurringTransactionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "amount" | "type" | "category" | "date" | "userId" | "accountId" | "paymentMethodId" | "transferId" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "amount" | "type" | "category" | "date" | "userId" | "accountId" | "paymentMethodId" | "transferId" | "transferGroupId" | "sourceAccountId" | "destinationAccountId" | "isRecurringGenerated" | "recurringTransactionId" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  paymentMethod?: boolean | Prisma.PaymentMethodDefaultArgs<ExtArgs>
+  paymentMethod?: boolean | Prisma.Transaction$paymentMethodArgs<ExtArgs>
+  sourceAccount?: boolean | Prisma.Transaction$sourceAccountArgs<ExtArgs>
+  destinationAccount?: boolean | Prisma.Transaction$destinationAccountArgs<ExtArgs>
+  recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
+  tags?: boolean | Prisma.Transaction$tagsArgs<ExtArgs>
+  emiSchedule?: boolean | Prisma.Transaction$emiScheduleArgs<ExtArgs>
+  loanPrepayment?: boolean | Prisma.Transaction$loanPrepaymentArgs<ExtArgs>
+  _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  paymentMethod?: boolean | Prisma.PaymentMethodDefaultArgs<ExtArgs>
+  paymentMethod?: boolean | Prisma.Transaction$paymentMethodArgs<ExtArgs>
+  sourceAccount?: boolean | Prisma.Transaction$sourceAccountArgs<ExtArgs>
+  destinationAccount?: boolean | Prisma.Transaction$destinationAccountArgs<ExtArgs>
+  recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
 }
 export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  paymentMethod?: boolean | Prisma.PaymentMethodDefaultArgs<ExtArgs>
+  paymentMethod?: boolean | Prisma.Transaction$paymentMethodArgs<ExtArgs>
+  sourceAccount?: boolean | Prisma.Transaction$sourceAccountArgs<ExtArgs>
+  destinationAccount?: boolean | Prisma.Transaction$destinationAccountArgs<ExtArgs>
+  recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
 }
 
 export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1090,7 +2383,13 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     account: Prisma.$AccountPayload<ExtArgs>
-    paymentMethod: Prisma.$PaymentMethodPayload<ExtArgs>
+    paymentMethod: Prisma.$PaymentMethodPayload<ExtArgs> | null
+    sourceAccount: Prisma.$AccountPayload<ExtArgs> | null
+    destinationAccount: Prisma.$AccountPayload<ExtArgs> | null
+    recurringTransaction: Prisma.$RecurringTransactionPayload<ExtArgs> | null
+    tags: Prisma.$TransactionTagOnTransactionPayload<ExtArgs>[]
+    emiSchedule: Prisma.$EmiSchedulePayload<ExtArgs> | null
+    loanPrepayment: Prisma.$LoanPrepaymentPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1101,12 +2400,17 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     date: Date
     userId: string
     accountId: string
-    paymentMethodId: string
+    paymentMethodId: string | null
     /**
      * *
      *    * ===== Transfer Support =====
      */
     transferId: string | null
+    transferGroupId: string | null
+    sourceAccountId: string | null
+    destinationAccountId: string | null
+    isRecurringGenerated: boolean
+    recurringTransactionId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["transaction"]>
@@ -1505,7 +2809,13 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  paymentMethod<T extends Prisma.PaymentMethodDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentMethodDefaultArgs<ExtArgs>>): Prisma.Prisma__PaymentMethodClient<runtime.Types.Result.GetResult<Prisma.$PaymentMethodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  paymentMethod<T extends Prisma.Transaction$paymentMethodArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$paymentMethodArgs<ExtArgs>>): Prisma.Prisma__PaymentMethodClient<runtime.Types.Result.GetResult<Prisma.$PaymentMethodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sourceAccount<T extends Prisma.Transaction$sourceAccountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$sourceAccountArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  destinationAccount<T extends Prisma.Transaction$destinationAccountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$destinationAccountArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  recurringTransaction<T extends Prisma.Transaction$recurringTransactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$recurringTransactionArgs<ExtArgs>>): Prisma.Prisma__RecurringTransactionClient<runtime.Types.Result.GetResult<Prisma.$RecurringTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tags<T extends Prisma.Transaction$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionTagOnTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emiSchedule<T extends Prisma.Transaction$emiScheduleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$emiScheduleArgs<ExtArgs>>): Prisma.Prisma__EmiScheduleClient<runtime.Types.Result.GetResult<Prisma.$EmiSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  loanPrepayment<T extends Prisma.Transaction$loanPrepaymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$loanPrepaymentArgs<ExtArgs>>): Prisma.Prisma__LoanPrepaymentClient<runtime.Types.Result.GetResult<Prisma.$LoanPrepaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1545,6 +2855,11 @@ export interface TransactionFieldRefs {
   readonly accountId: Prisma.FieldRef<"Transaction", 'String'>
   readonly paymentMethodId: Prisma.FieldRef<"Transaction", 'String'>
   readonly transferId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly transferGroupId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly sourceAccountId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly destinationAccountId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly isRecurringGenerated: Prisma.FieldRef<"Transaction", 'Boolean'>
+  readonly recurringTransactionId: Prisma.FieldRef<"Transaction", 'String'>
   readonly createdAt: Prisma.FieldRef<"Transaction", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Transaction", 'DateTime'>
 }
@@ -1940,6 +3255,144 @@ export type TransactionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Transactions to delete.
    */
   limit?: number
+}
+
+/**
+ * Transaction.paymentMethod
+ */
+export type Transaction$paymentMethodArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentMethod
+   */
+  select?: Prisma.PaymentMethodSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentMethod
+   */
+  omit?: Prisma.PaymentMethodOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentMethodInclude<ExtArgs> | null
+  where?: Prisma.PaymentMethodWhereInput
+}
+
+/**
+ * Transaction.sourceAccount
+ */
+export type Transaction$sourceAccountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Account
+   */
+  select?: Prisma.AccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Account
+   */
+  omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  where?: Prisma.AccountWhereInput
+}
+
+/**
+ * Transaction.destinationAccount
+ */
+export type Transaction$destinationAccountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Account
+   */
+  select?: Prisma.AccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Account
+   */
+  omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  where?: Prisma.AccountWhereInput
+}
+
+/**
+ * Transaction.recurringTransaction
+ */
+export type Transaction$recurringTransactionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RecurringTransaction
+   */
+  select?: Prisma.RecurringTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RecurringTransaction
+   */
+  omit?: Prisma.RecurringTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RecurringTransactionInclude<ExtArgs> | null
+  where?: Prisma.RecurringTransactionWhereInput
+}
+
+/**
+ * Transaction.tags
+ */
+export type Transaction$tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransactionTagOnTransaction
+   */
+  select?: Prisma.TransactionTagOnTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransactionTagOnTransaction
+   */
+  omit?: Prisma.TransactionTagOnTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransactionTagOnTransactionInclude<ExtArgs> | null
+  where?: Prisma.TransactionTagOnTransactionWhereInput
+  orderBy?: Prisma.TransactionTagOnTransactionOrderByWithRelationInput | Prisma.TransactionTagOnTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.TransactionTagOnTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransactionTagOnTransactionScalarFieldEnum | Prisma.TransactionTagOnTransactionScalarFieldEnum[]
+}
+
+/**
+ * Transaction.emiSchedule
+ */
+export type Transaction$emiScheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmiSchedule
+   */
+  select?: Prisma.EmiScheduleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmiSchedule
+   */
+  omit?: Prisma.EmiScheduleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmiScheduleInclude<ExtArgs> | null
+  where?: Prisma.EmiScheduleWhereInput
+}
+
+/**
+ * Transaction.loanPrepayment
+ */
+export type Transaction$loanPrepaymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LoanPrepayment
+   */
+  select?: Prisma.LoanPrepaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LoanPrepayment
+   */
+  omit?: Prisma.LoanPrepaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoanPrepaymentInclude<ExtArgs> | null
+  where?: Prisma.LoanPrepaymentWhereInput
 }
 
 /**

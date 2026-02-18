@@ -24,6 +24,7 @@ enum AccountType {
   BANK
   WALLET
   CREDIT
+  CREDIT_CARD
 }
 
 enum PaymentMethodType {
@@ -32,6 +33,35 @@ enum PaymentMethodType {
   WALLET
   CASH
   OTHER
+}
+
+enum RecurringFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum RecurringStatus {
+  ACTIVE
+  PAUSED
+  ENDED
+}
+
+enum LoanStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum EmiStatus {
+  PENDING
+  PAID
+  SKIPPED
+}
+
+enum NetWorthEntryType {
+  ASSET
+  DEBT
 }
 
 /**
@@ -49,6 +79,10 @@ model User {
 
   accounts     Account[]
   transactions Transaction[]
+  recurringTransactions RecurringTransaction[]
+  loans               Loan[]
+  netWorthEntries     NetWorthEntry[]
+  transactionTags     TransactionTag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,6 +99,11 @@ model Account {
   name          String // HDFC Bank, Amazon Pay, Cash
   type          AccountType
   balance       Float       @default(0)
+  initialBalance Float      @default(0)
+  currency      String      @default("USD") @db.VarChar(12)
+  color         String?     @db.VarChar(32)
+  icon          String?     @db.VarChar(64)
+  isArchived    Boolean     @default(false)
   accountNumber String?
   email         String?
   phone         String?
@@ -74,11 +113,17 @@ model Account {
 
   paymentMethods PaymentMethod[]
   transactions   Transaction[]
+  transferSourceTransactions Transaction[] @relation("TransferSourceAccount")
+  transferDestinationTransactions Transaction[] @relation("TransferDestinationAccount")
+  recurringTransactions RecurringTransaction[] @relation("RecurringPrimaryAccount")
+  recurringTransferDestinations RecurringTransaction[] @relation("RecurringDestinationAccount")
+  loans         Loan[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@index([userId, type])
 }
 
 /**
@@ -126,13 +171,24 @@ model Transaction {
   accountId String
   account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  paymentMethodId String
-  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId String?
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
 
   /**
    * ===== Transfer Support =====
    */
   transferId String?
+  transferGroupId String?
+  sourceAccountId String?
+  sourceAccount   Account? @relation("TransferSourceAccount", fields: [sourceAccountId], references: [id], onDelete: SetNull)
+  destinationAccountId String?
+  destinationAccount   Account? @relation("TransferDestinationAccount", fields: [destinationAccountId], references: [id], onDelete: SetNull)
+  isRecurringGenerated Boolean @default(false)
+  recurringTransactionId String?
+  recurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id], onDelete: SetNull)
+  tags TransactionTagOnTransaction[]
+  emiSchedule EmiSchedule?
+  loanPrepayment LoanPrepayment?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -142,4 +198,139 @@ model Transaction {
   @@index([paymentMethodId])
   @@index([type])
   @@index([date])
+  @@index([transferGroupId])
+  @@index([sourceAccountId])
+  @@index([destinationAccountId])
+  @@index([recurringTransactionId])
+}
+
+model RecurringTransaction {
+  id String @id @default(uuid())
+  name String
+  description String?
+  amount Float
+  type TransactionType
+  category String?
+  frequency RecurringFrequency
+  status RecurringStatus @default(ACTIVE)
+  startDate DateTime
+  endDate DateTime?
+  nextRunAt DateTime
+  lastGeneratedAt DateTime?
+  accountId String
+  account Account @relation("RecurringPrimaryAccount", fields: [accountId], references: [id], onDelete: Cascade)
+  destinationAccountId String?
+  destinationAccount Account? @relation("RecurringDestinationAccount", fields: [destinationAccountId], references: [id], onDelete: SetNull)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  generatedTransactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([nextRunAt, status])
+}
+
+model Loan {
+  id String @id @default(uuid())
+  name String
+  principal Float
+  interestRate Float
+  tenureMonths Int
+  emiAmount Float
+  startDate DateTime
+  status LoanStatus @default(ACTIVE)
+  accountId String
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  paidPrincipal Float @default(0)
+  paidInterest Float @default(0)
+  remainingPrincipal Float
+
+  emiSchedules EmiSchedule[]
+  prepayments LoanPrepayment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([accountId])
+}
+
+model EmiSchedule {
+  id String @id @default(uuid())
+  loanId String
+  loan Loan @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  dueDate DateTime
+  amount Float
+  principalComponent Float
+  interestComponent Float
+  status EmiStatus @default(PENDING)
+  paidAt DateTime?
+  transactionId String? @unique
+  transaction Transaction? @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([loanId, status])
+  @@index([dueDate])
+}
+
+model LoanPrepayment {
+  id String @id @default(uuid())
+  loanId String
+  loan Loan @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  amount Float
+  date DateTime @default(now())
+  transactionId String? @unique
+  transaction Transaction? @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@index([loanId])
+}
+
+model NetWorthEntry {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type NetWorthEntryType
+  category String
+  name String
+  currentValue Float
+  currency String @default("USD") @db.VarChar(12)
+  notes String?
+  valuationDate DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, type])
+}
+
+model TransactionTag {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name String
+  transactions TransactionTagOnTransaction[]
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model TransactionTagOnTransaction {
+  transactionId String
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  tagId String
+  tag TransactionTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([transactionId, tagId])
+  @@index([tagId])
 }

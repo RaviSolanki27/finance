@@ -368,9 +368,9 @@ export type PaymentMethodMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type PaymentMethodScalarRelationFilter = {
-  is?: Prisma.PaymentMethodWhereInput
-  isNot?: Prisma.PaymentMethodWhereInput
+export type PaymentMethodNullableScalarRelationFilter = {
+  is?: Prisma.PaymentMethodWhereInput | null
+  isNot?: Prisma.PaymentMethodWhereInput | null
 }
 
 export type PaymentMethodCreateNestedManyWithoutAccountInput = {
@@ -419,20 +419,18 @@ export type EnumPaymentMethodTypeFieldUpdateOperationsInput = {
   set?: $Enums.PaymentMethodType
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type PaymentMethodCreateNestedOneWithoutTransactionsInput = {
   create?: Prisma.XOR<Prisma.PaymentMethodCreateWithoutTransactionsInput, Prisma.PaymentMethodUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.PaymentMethodCreateOrConnectWithoutTransactionsInput
   connect?: Prisma.PaymentMethodWhereUniqueInput
 }
 
-export type PaymentMethodUpdateOneRequiredWithoutTransactionsNestedInput = {
+export type PaymentMethodUpdateOneWithoutTransactionsNestedInput = {
   create?: Prisma.XOR<Prisma.PaymentMethodCreateWithoutTransactionsInput, Prisma.PaymentMethodUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.PaymentMethodCreateOrConnectWithoutTransactionsInput
   upsert?: Prisma.PaymentMethodUpsertWithoutTransactionsInput
+  disconnect?: Prisma.PaymentMethodWhereInput | boolean
+  delete?: Prisma.PaymentMethodWhereInput | boolean
   connect?: Prisma.PaymentMethodWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentMethodUpdateToOneWithWhereWithoutTransactionsInput, Prisma.PaymentMethodUpdateWithoutTransactionsInput>, Prisma.PaymentMethodUncheckedUpdateWithoutTransactionsInput>
 }

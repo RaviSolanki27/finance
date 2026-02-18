@@ -54,7 +54,14 @@ export const ModelName = {
   User: 'User',
   Account: 'Account',
   PaymentMethod: 'PaymentMethod',
-  Transaction: 'Transaction'
+  Transaction: 'Transaction',
+  RecurringTransaction: 'RecurringTransaction',
+  Loan: 'Loan',
+  EmiSchedule: 'EmiSchedule',
+  LoanPrepayment: 'LoanPrepayment',
+  NetWorthEntry: 'NetWorthEntry',
+  TransactionTag: 'TransactionTag',
+  TransactionTagOnTransaction: 'TransactionTagOnTransaction'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -91,6 +98,11 @@ export const AccountScalarFieldEnum = {
   name: 'name',
   type: 'type',
   balance: 'balance',
+  initialBalance: 'initialBalance',
+  currency: 'currency',
+  color: 'color',
+  icon: 'icon',
+  isArchived: 'isArchived',
   accountNumber: 'accountNumber',
   email: 'email',
   phone: 'phone',
@@ -126,11 +138,125 @@ export const TransactionScalarFieldEnum = {
   accountId: 'accountId',
   paymentMethodId: 'paymentMethodId',
   transferId: 'transferId',
+  transferGroupId: 'transferGroupId',
+  sourceAccountId: 'sourceAccountId',
+  destinationAccountId: 'destinationAccountId',
+  isRecurringGenerated: 'isRecurringGenerated',
+  recurringTransactionId: 'recurringTransactionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const RecurringTransactionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  amount: 'amount',
+  type: 'type',
+  category: 'category',
+  frequency: 'frequency',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  nextRunAt: 'nextRunAt',
+  lastGeneratedAt: 'lastGeneratedAt',
+  accountId: 'accountId',
+  destinationAccountId: 'destinationAccountId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecurringTransactionScalarFieldEnum = (typeof RecurringTransactionScalarFieldEnum)[keyof typeof RecurringTransactionScalarFieldEnum]
+
+
+export const LoanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  principal: 'principal',
+  interestRate: 'interestRate',
+  tenureMonths: 'tenureMonths',
+  emiAmount: 'emiAmount',
+  startDate: 'startDate',
+  status: 'status',
+  accountId: 'accountId',
+  userId: 'userId',
+  paidPrincipal: 'paidPrincipal',
+  paidInterest: 'paidInterest',
+  remainingPrincipal: 'remainingPrincipal',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LoanScalarFieldEnum = (typeof LoanScalarFieldEnum)[keyof typeof LoanScalarFieldEnum]
+
+
+export const EmiScheduleScalarFieldEnum = {
+  id: 'id',
+  loanId: 'loanId',
+  dueDate: 'dueDate',
+  amount: 'amount',
+  principalComponent: 'principalComponent',
+  interestComponent: 'interestComponent',
+  status: 'status',
+  paidAt: 'paidAt',
+  transactionId: 'transactionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmiScheduleScalarFieldEnum = (typeof EmiScheduleScalarFieldEnum)[keyof typeof EmiScheduleScalarFieldEnum]
+
+
+export const LoanPrepaymentScalarFieldEnum = {
+  id: 'id',
+  loanId: 'loanId',
+  amount: 'amount',
+  date: 'date',
+  transactionId: 'transactionId',
+  createdAt: 'createdAt'
+} as const
+
+export type LoanPrepaymentScalarFieldEnum = (typeof LoanPrepaymentScalarFieldEnum)[keyof typeof LoanPrepaymentScalarFieldEnum]
+
+
+export const NetWorthEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  category: 'category',
+  name: 'name',
+  currentValue: 'currentValue',
+  currency: 'currency',
+  notes: 'notes',
+  valuationDate: 'valuationDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NetWorthEntryScalarFieldEnum = (typeof NetWorthEntryScalarFieldEnum)[keyof typeof NetWorthEntryScalarFieldEnum]
+
+
+export const TransactionTagScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type TransactionTagScalarFieldEnum = (typeof TransactionTagScalarFieldEnum)[keyof typeof TransactionTagScalarFieldEnum]
+
+
+export const TransactionTagOnTransactionScalarFieldEnum = {
+  transactionId: 'transactionId',
+  tagId: 'tagId',
+  createdAt: 'createdAt'
+} as const
+
+export type TransactionTagOnTransactionScalarFieldEnum = (typeof TransactionTagOnTransactionScalarFieldEnum)[keyof typeof TransactionTagOnTransactionScalarFieldEnum]
 
 
 export const SortOrder = {

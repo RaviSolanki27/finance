@@ -59,3 +59,38 @@ export type PaymentMethod = Prisma.PaymentMethodModel
  * 
  */
 export type Transaction = Prisma.TransactionModel
+/**
+ * Model RecurringTransaction
+ * 
+ */
+export type RecurringTransaction = Prisma.RecurringTransactionModel
+/**
+ * Model Loan
+ * 
+ */
+export type Loan = Prisma.LoanModel
+/**
+ * Model EmiSchedule
+ * 
+ */
+export type EmiSchedule = Prisma.EmiScheduleModel
+/**
+ * Model LoanPrepayment
+ * 
+ */
+export type LoanPrepayment = Prisma.LoanPrepaymentModel
+/**
+ * Model NetWorthEntry
+ * 
+ */
+export type NetWorthEntry = Prisma.NetWorthEntryModel
+/**
+ * Model TransactionTag
+ * 
+ */
+export type TransactionTag = Prisma.TransactionTagModel
+/**
+ * Model TransactionTagOnTransaction
+ * 
+ */
+export type TransactionTagOnTransaction = Prisma.TransactionTagOnTransactionModel

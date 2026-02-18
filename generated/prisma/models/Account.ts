@@ -28,10 +28,12 @@ export type AggregateAccount = {
 
 export type AccountAvgAggregateOutputType = {
   balance: number | null
+  initialBalance: number | null
 }
 
 export type AccountSumAggregateOutputType = {
   balance: number | null
+  initialBalance: number | null
 }
 
 export type AccountMinAggregateOutputType = {
@@ -39,6 +41,11 @@ export type AccountMinAggregateOutputType = {
   name: string | null
   type: $Enums.AccountType | null
   balance: number | null
+  initialBalance: number | null
+  currency: string | null
+  color: string | null
+  icon: string | null
+  isArchived: boolean | null
   accountNumber: string | null
   email: string | null
   phone: string | null
@@ -52,6 +59,11 @@ export type AccountMaxAggregateOutputType = {
   name: string | null
   type: $Enums.AccountType | null
   balance: number | null
+  initialBalance: number | null
+  currency: string | null
+  color: string | null
+  icon: string | null
+  isArchived: boolean | null
   accountNumber: string | null
   email: string | null
   phone: string | null
@@ -65,6 +77,11 @@ export type AccountCountAggregateOutputType = {
   name: number
   type: number
   balance: number
+  initialBalance: number
+  currency: number
+  color: number
+  icon: number
+  isArchived: number
   accountNumber: number
   email: number
   phone: number
@@ -77,10 +94,12 @@ export type AccountCountAggregateOutputType = {
 
 export type AccountAvgAggregateInputType = {
   balance?: true
+  initialBalance?: true
 }
 
 export type AccountSumAggregateInputType = {
   balance?: true
+  initialBalance?: true
 }
 
 export type AccountMinAggregateInputType = {
@@ -88,6 +107,11 @@ export type AccountMinAggregateInputType = {
   name?: true
   type?: true
   balance?: true
+  initialBalance?: true
+  currency?: true
+  color?: true
+  icon?: true
+  isArchived?: true
   accountNumber?: true
   email?: true
   phone?: true
@@ -101,6 +125,11 @@ export type AccountMaxAggregateInputType = {
   name?: true
   type?: true
   balance?: true
+  initialBalance?: true
+  currency?: true
+  color?: true
+  icon?: true
+  isArchived?: true
   accountNumber?: true
   email?: true
   phone?: true
@@ -114,6 +143,11 @@ export type AccountCountAggregateInputType = {
   name?: true
   type?: true
   balance?: true
+  initialBalance?: true
+  currency?: true
+  color?: true
+  icon?: true
+  isArchived?: true
   accountNumber?: true
   email?: true
   phone?: true
@@ -214,6 +248,11 @@ export type AccountGroupByOutputType = {
   name: string
   type: $Enums.AccountType
   balance: number
+  initialBalance: number
+  currency: string
+  color: string | null
+  icon: string | null
+  isArchived: boolean
   accountNumber: string | null
   email: string | null
   phone: string | null
@@ -250,6 +289,11 @@ export type AccountWhereInput = {
   name?: Prisma.StringFilter<"Account"> | string
   type?: Prisma.EnumAccountTypeFilter<"Account"> | $Enums.AccountType
   balance?: Prisma.FloatFilter<"Account"> | number
+  initialBalance?: Prisma.FloatFilter<"Account"> | number
+  currency?: Prisma.StringFilter<"Account"> | string
+  color?: Prisma.StringNullableFilter<"Account"> | string | null
+  icon?: Prisma.StringNullableFilter<"Account"> | string | null
+  isArchived?: Prisma.BoolFilter<"Account"> | boolean
   accountNumber?: Prisma.StringNullableFilter<"Account"> | string | null
   email?: Prisma.StringNullableFilter<"Account"> | string | null
   phone?: Prisma.StringNullableFilter<"Account"> | string | null
@@ -259,6 +303,11 @@ export type AccountWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   paymentMethods?: Prisma.PaymentMethodListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
+  transferSourceTransactions?: Prisma.TransactionListRelationFilter
+  transferDestinationTransactions?: Prisma.TransactionListRelationFilter
+  recurringTransactions?: Prisma.RecurringTransactionListRelationFilter
+  recurringTransferDestinations?: Prisma.RecurringTransactionListRelationFilter
+  loans?: Prisma.LoanListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
@@ -266,6 +315,11 @@ export type AccountOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  initialBalance?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
+  icon?: Prisma.SortOrderInput | Prisma.SortOrder
+  isArchived?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -275,6 +329,11 @@ export type AccountOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   paymentMethods?: Prisma.PaymentMethodOrderByRelationAggregateInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
+  transferSourceTransactions?: Prisma.TransactionOrderByRelationAggregateInput
+  transferDestinationTransactions?: Prisma.TransactionOrderByRelationAggregateInput
+  recurringTransactions?: Prisma.RecurringTransactionOrderByRelationAggregateInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionOrderByRelationAggregateInput
+  loans?: Prisma.LoanOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -285,6 +344,11 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Account"> | string
   type?: Prisma.EnumAccountTypeFilter<"Account"> | $Enums.AccountType
   balance?: Prisma.FloatFilter<"Account"> | number
+  initialBalance?: Prisma.FloatFilter<"Account"> | number
+  currency?: Prisma.StringFilter<"Account"> | string
+  color?: Prisma.StringNullableFilter<"Account"> | string | null
+  icon?: Prisma.StringNullableFilter<"Account"> | string | null
+  isArchived?: Prisma.BoolFilter<"Account"> | boolean
   accountNumber?: Prisma.StringNullableFilter<"Account"> | string | null
   email?: Prisma.StringNullableFilter<"Account"> | string | null
   phone?: Prisma.StringNullableFilter<"Account"> | string | null
@@ -294,6 +358,11 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   paymentMethods?: Prisma.PaymentMethodListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
+  transferSourceTransactions?: Prisma.TransactionListRelationFilter
+  transferDestinationTransactions?: Prisma.TransactionListRelationFilter
+  recurringTransactions?: Prisma.RecurringTransactionListRelationFilter
+  recurringTransferDestinations?: Prisma.RecurringTransactionListRelationFilter
+  loans?: Prisma.LoanListRelationFilter
 }, "id">
 
 export type AccountOrderByWithAggregationInput = {
@@ -301,6 +370,11 @@ export type AccountOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  initialBalance?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
+  icon?: Prisma.SortOrderInput | Prisma.SortOrder
+  isArchived?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -322,6 +396,11 @@ export type AccountScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Account"> | string
   type?: Prisma.EnumAccountTypeWithAggregatesFilter<"Account"> | $Enums.AccountType
   balance?: Prisma.FloatWithAggregatesFilter<"Account"> | number
+  initialBalance?: Prisma.FloatWithAggregatesFilter<"Account"> | number
+  currency?: Prisma.StringWithAggregatesFilter<"Account"> | string
+  color?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  icon?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  isArchived?: Prisma.BoolWithAggregatesFilter<"Account"> | boolean
   accountNumber?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
@@ -335,6 +414,11 @@ export type AccountCreateInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -343,6 +427,11 @@ export type AccountCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutAccountsInput
   paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
@@ -350,6 +439,11 @@ export type AccountUncheckedCreateInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -358,6 +452,11 @@ export type AccountUncheckedCreateInput = {
   updatedAt?: Date | string
   paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
@@ -365,6 +464,11 @@ export type AccountUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -373,6 +477,11 @@ export type AccountUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
   paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
@@ -380,6 +489,11 @@ export type AccountUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -388,6 +502,11 @@ export type AccountUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
@@ -395,6 +514,11 @@ export type AccountCreateManyInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -408,6 +532,11 @@ export type AccountUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -420,6 +549,11 @@ export type AccountUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -443,6 +577,11 @@ export type AccountCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  initialBalance?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  color?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
+  isArchived?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -453,6 +592,7 @@ export type AccountCountOrderByAggregateInput = {
 
 export type AccountAvgOrderByAggregateInput = {
   balance?: Prisma.SortOrder
+  initialBalance?: Prisma.SortOrder
 }
 
 export type AccountMaxOrderByAggregateInput = {
@@ -460,6 +600,11 @@ export type AccountMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  initialBalance?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  color?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
+  isArchived?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -473,6 +618,11 @@ export type AccountMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  initialBalance?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  color?: Prisma.SortOrder
+  icon?: Prisma.SortOrder
+  isArchived?: Prisma.SortOrder
   accountNumber?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -483,11 +633,17 @@ export type AccountMinOrderByAggregateInput = {
 
 export type AccountSumOrderByAggregateInput = {
   balance?: Prisma.SortOrder
+  initialBalance?: Prisma.SortOrder
 }
 
 export type AccountScalarRelationFilter = {
   is?: Prisma.AccountWhereInput
   isNot?: Prisma.AccountWhereInput
+}
+
+export type AccountNullableScalarRelationFilter = {
+  is?: Prisma.AccountWhereInput | null
+  isNot?: Prisma.AccountWhereInput | null
 }
 
 export type AccountCreateNestedManyWithoutUserInput = {
@@ -544,6 +700,10 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type AccountCreateNestedOneWithoutPaymentMethodsInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutPaymentMethodsInput, Prisma.AccountUncheckedCreateWithoutPaymentMethodsInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPaymentMethodsInput
@@ -564,6 +724,18 @@ export type AccountCreateNestedOneWithoutTransactionsInput = {
   connect?: Prisma.AccountWhereUniqueInput
 }
 
+export type AccountCreateNestedOneWithoutTransferSourceTransactionsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutTransferSourceTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferSourceTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutTransferSourceTransactionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountCreateNestedOneWithoutTransferDestinationTransactionsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutTransferDestinationTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferDestinationTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutTransferDestinationTransactionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
 export type AccountUpdateOneRequiredWithoutTransactionsNestedInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutTransactionsInput
@@ -572,11 +744,80 @@ export type AccountUpdateOneRequiredWithoutTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutTransactionsInput, Prisma.AccountUpdateWithoutTransactionsInput>, Prisma.AccountUncheckedUpdateWithoutTransactionsInput>
 }
 
+export type AccountUpdateOneWithoutTransferSourceTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutTransferSourceTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferSourceTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutTransferSourceTransactionsInput
+  upsert?: Prisma.AccountUpsertWithoutTransferSourceTransactionsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutTransferSourceTransactionsInput, Prisma.AccountUpdateWithoutTransferSourceTransactionsInput>, Prisma.AccountUncheckedUpdateWithoutTransferSourceTransactionsInput>
+}
+
+export type AccountUpdateOneWithoutTransferDestinationTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutTransferDestinationTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferDestinationTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutTransferDestinationTransactionsInput
+  upsert?: Prisma.AccountUpsertWithoutTransferDestinationTransactionsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutTransferDestinationTransactionsInput, Prisma.AccountUpdateWithoutTransferDestinationTransactionsInput>, Prisma.AccountUncheckedUpdateWithoutTransferDestinationTransactionsInput>
+}
+
+export type AccountCreateNestedOneWithoutRecurringTransactionsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransactionsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutRecurringTransactionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountCreateNestedOneWithoutRecurringTransferDestinationsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransferDestinationsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransferDestinationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutRecurringTransferDestinationsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutRecurringTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransactionsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutRecurringTransactionsInput
+  upsert?: Prisma.AccountUpsertWithoutRecurringTransactionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutRecurringTransactionsInput, Prisma.AccountUpdateWithoutRecurringTransactionsInput>, Prisma.AccountUncheckedUpdateWithoutRecurringTransactionsInput>
+}
+
+export type AccountUpdateOneWithoutRecurringTransferDestinationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransferDestinationsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransferDestinationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutRecurringTransferDestinationsInput
+  upsert?: Prisma.AccountUpsertWithoutRecurringTransferDestinationsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutRecurringTransferDestinationsInput, Prisma.AccountUpdateWithoutRecurringTransferDestinationsInput>, Prisma.AccountUncheckedUpdateWithoutRecurringTransferDestinationsInput>
+}
+
+export type AccountCreateNestedOneWithoutLoansInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutLoansInput, Prisma.AccountUncheckedCreateWithoutLoansInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutLoansInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutLoansNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutLoansInput, Prisma.AccountUncheckedCreateWithoutLoansInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutLoansInput
+  upsert?: Prisma.AccountUpsertWithoutLoansInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutLoansInput, Prisma.AccountUpdateWithoutLoansInput>, Prisma.AccountUncheckedUpdateWithoutLoansInput>
+}
+
 export type AccountCreateWithoutUserInput = {
   id?: string
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -584,6 +825,11 @@ export type AccountCreateWithoutUserInput = {
   updatedAt?: Date | string
   paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutUserInput = {
@@ -591,6 +837,11 @@ export type AccountUncheckedCreateWithoutUserInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -598,6 +849,11 @@ export type AccountUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutUserInput = {
@@ -634,6 +890,11 @@ export type AccountScalarWhereInput = {
   name?: Prisma.StringFilter<"Account"> | string
   type?: Prisma.EnumAccountTypeFilter<"Account"> | $Enums.AccountType
   balance?: Prisma.FloatFilter<"Account"> | number
+  initialBalance?: Prisma.FloatFilter<"Account"> | number
+  currency?: Prisma.StringFilter<"Account"> | string
+  color?: Prisma.StringNullableFilter<"Account"> | string | null
+  icon?: Prisma.StringNullableFilter<"Account"> | string | null
+  isArchived?: Prisma.BoolFilter<"Account"> | boolean
   accountNumber?: Prisma.StringNullableFilter<"Account"> | string | null
   email?: Prisma.StringNullableFilter<"Account"> | string | null
   phone?: Prisma.StringNullableFilter<"Account"> | string | null
@@ -647,6 +908,11 @@ export type AccountCreateWithoutPaymentMethodsInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -654,6 +920,11 @@ export type AccountCreateWithoutPaymentMethodsInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAccountsInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutPaymentMethodsInput = {
@@ -661,6 +932,11 @@ export type AccountUncheckedCreateWithoutPaymentMethodsInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -668,6 +944,11 @@ export type AccountUncheckedCreateWithoutPaymentMethodsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutPaymentMethodsInput = {
@@ -691,6 +972,11 @@ export type AccountUpdateWithoutPaymentMethodsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -698,6 +984,11 @@ export type AccountUpdateWithoutPaymentMethodsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutPaymentMethodsInput = {
@@ -705,6 +996,11 @@ export type AccountUncheckedUpdateWithoutPaymentMethodsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -712,6 +1008,11 @@ export type AccountUncheckedUpdateWithoutPaymentMethodsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutTransactionsInput = {
@@ -719,6 +1020,11 @@ export type AccountCreateWithoutTransactionsInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -726,6 +1032,11 @@ export type AccountCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAccountsInput
   paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutTransactionsInput = {
@@ -733,6 +1044,11 @@ export type AccountUncheckedCreateWithoutTransactionsInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -740,11 +1056,122 @@ export type AccountUncheckedCreateWithoutTransactionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutTransactionsInput = {
   where: Prisma.AccountWhereUniqueInput
   create: Prisma.XOR<Prisma.AccountCreateWithoutTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransactionsInput>
+}
+
+export type AccountCreateWithoutTransferSourceTransactionsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutAccountsInput
+  paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutTransferSourceTransactionsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutTransferSourceTransactionsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutTransferSourceTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferSourceTransactionsInput>
+}
+
+export type AccountCreateWithoutTransferDestinationTransactionsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutAccountsInput
+  paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutTransferDestinationTransactionsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutTransferDestinationTransactionsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutTransferDestinationTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferDestinationTransactionsInput>
 }
 
 export type AccountUpsertWithoutTransactionsInput = {
@@ -763,6 +1190,11 @@ export type AccountUpdateWithoutTransactionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -770,6 +1202,11 @@ export type AccountUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
   paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutTransactionsInput = {
@@ -777,6 +1214,11 @@ export type AccountUncheckedUpdateWithoutTransactionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -784,6 +1226,465 @@ export type AccountUncheckedUpdateWithoutTransactionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUpsertWithoutTransferSourceTransactionsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutTransferSourceTransactionsInput, Prisma.AccountUncheckedUpdateWithoutTransferSourceTransactionsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutTransferSourceTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferSourceTransactionsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutTransferSourceTransactionsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutTransferSourceTransactionsInput, Prisma.AccountUncheckedUpdateWithoutTransferSourceTransactionsInput>
+}
+
+export type AccountUpdateWithoutTransferSourceTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
+  paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutTransferSourceTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUpsertWithoutTransferDestinationTransactionsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutTransferDestinationTransactionsInput, Prisma.AccountUncheckedUpdateWithoutTransferDestinationTransactionsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutTransferDestinationTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransferDestinationTransactionsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutTransferDestinationTransactionsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutTransferDestinationTransactionsInput, Prisma.AccountUncheckedUpdateWithoutTransferDestinationTransactionsInput>
+}
+
+export type AccountUpdateWithoutTransferDestinationTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
+  paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutTransferDestinationTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutRecurringTransactionsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutAccountsInput
+  paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutRecurringTransactionsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutRecurringTransactionsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransactionsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransactionsInput>
+}
+
+export type AccountCreateWithoutRecurringTransferDestinationsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutAccountsInput
+  paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  loans?: Prisma.LoanCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutRecurringTransferDestinationsInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  loans?: Prisma.LoanUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutRecurringTransferDestinationsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransferDestinationsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransferDestinationsInput>
+}
+
+export type AccountUpsertWithoutRecurringTransactionsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutRecurringTransactionsInput, Prisma.AccountUncheckedUpdateWithoutRecurringTransactionsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransactionsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransactionsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutRecurringTransactionsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutRecurringTransactionsInput, Prisma.AccountUncheckedUpdateWithoutRecurringTransactionsInput>
+}
+
+export type AccountUpdateWithoutRecurringTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
+  paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutRecurringTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUpsertWithoutRecurringTransferDestinationsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutRecurringTransferDestinationsInput, Prisma.AccountUncheckedUpdateWithoutRecurringTransferDestinationsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutRecurringTransferDestinationsInput, Prisma.AccountUncheckedCreateWithoutRecurringTransferDestinationsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutRecurringTransferDestinationsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutRecurringTransferDestinationsInput, Prisma.AccountUncheckedUpdateWithoutRecurringTransferDestinationsInput>
+}
+
+export type AccountUpdateWithoutRecurringTransferDestinationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
+  paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutRecurringTransferDestinationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutLoansInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutAccountsInput
+  paymentMethods?: Prisma.PaymentMethodCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionCreateNestedManyWithoutDestinationAccountInput
+}
+
+export type AccountUncheckedCreateWithoutLoansInput = {
+  id?: string
+  name: string
+  type: $Enums.AccountType
+  balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
+  accountNumber?: string | null
+  email?: string | null
+  phone?: string | null
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAccountInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutSourceAccountInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutAccountInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutDestinationAccountInput
+}
+
+export type AccountCreateOrConnectWithoutLoansInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutLoansInput, Prisma.AccountUncheckedCreateWithoutLoansInput>
+}
+
+export type AccountUpsertWithoutLoansInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutLoansInput, Prisma.AccountUncheckedUpdateWithoutLoansInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutLoansInput, Prisma.AccountUncheckedCreateWithoutLoansInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutLoansInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutLoansInput, Prisma.AccountUncheckedUpdateWithoutLoansInput>
+}
+
+export type AccountUpdateWithoutLoansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutAccountsNestedInput
+  paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutLoansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
 }
 
 export type AccountCreateManyUserInput = {
@@ -791,6 +1692,11 @@ export type AccountCreateManyUserInput = {
   name: string
   type: $Enums.AccountType
   balance?: number
+  initialBalance?: number
+  currency?: string
+  color?: string | null
+  icon?: string | null
+  isArchived?: boolean
   accountNumber?: string | null
   email?: string | null
   phone?: string | null
@@ -803,6 +1709,11 @@ export type AccountUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -810,6 +1721,11 @@ export type AccountUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   paymentMethods?: Prisma.PaymentMethodUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutUserInput = {
@@ -817,6 +1733,11 @@ export type AccountUncheckedUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -824,6 +1745,11 @@ export type AccountUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   paymentMethods?: Prisma.PaymentMethodUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAccountNestedInput
+  transferSourceTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutSourceAccountNestedInput
+  transferDestinationTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  recurringTransferDestinations?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutDestinationAccountNestedInput
+  loans?: Prisma.LoanUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateManyWithoutUserInput = {
@@ -831,6 +1757,11 @@ export type AccountUncheckedUpdateManyWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   balance?: Prisma.FloatFieldUpdateOperationsInput | number
+  initialBalance?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  icon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -846,11 +1777,21 @@ export type AccountUncheckedUpdateManyWithoutUserInput = {
 export type AccountCountOutputType = {
   paymentMethods: number
   transactions: number
+  transferSourceTransactions: number
+  transferDestinationTransactions: number
+  recurringTransactions: number
+  recurringTransferDestinations: number
+  loans: number
 }
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   paymentMethods?: boolean | AccountCountOutputTypeCountPaymentMethodsArgs
   transactions?: boolean | AccountCountOutputTypeCountTransactionsArgs
+  transferSourceTransactions?: boolean | AccountCountOutputTypeCountTransferSourceTransactionsArgs
+  transferDestinationTransactions?: boolean | AccountCountOutputTypeCountTransferDestinationTransactionsArgs
+  recurringTransactions?: boolean | AccountCountOutputTypeCountRecurringTransactionsArgs
+  recurringTransferDestinations?: boolean | AccountCountOutputTypeCountRecurringTransferDestinationsArgs
+  loans?: boolean | AccountCountOutputTypeCountLoansArgs
 }
 
 /**
@@ -877,12 +1818,52 @@ export type AccountCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.
   where?: Prisma.TransactionWhereInput
 }
 
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountTransferSourceTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransactionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountTransferDestinationTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransactionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountRecurringTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RecurringTransactionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountRecurringTransferDestinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RecurringTransactionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountLoansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LoanWhereInput
+}
+
 
 export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   type?: boolean
   balance?: boolean
+  initialBalance?: boolean
+  currency?: boolean
+  color?: boolean
+  icon?: boolean
+  isArchived?: boolean
   accountNumber?: boolean
   email?: boolean
   phone?: boolean
@@ -892,6 +1873,11 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   paymentMethods?: boolean | Prisma.Account$paymentMethodsArgs<ExtArgs>
   transactions?: boolean | Prisma.Account$transactionsArgs<ExtArgs>
+  transferSourceTransactions?: boolean | Prisma.Account$transferSourceTransactionsArgs<ExtArgs>
+  transferDestinationTransactions?: boolean | Prisma.Account$transferDestinationTransactionsArgs<ExtArgs>
+  recurringTransactions?: boolean | Prisma.Account$recurringTransactionsArgs<ExtArgs>
+  recurringTransferDestinations?: boolean | Prisma.Account$recurringTransferDestinationsArgs<ExtArgs>
+  loans?: boolean | Prisma.Account$loansArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
@@ -900,6 +1886,11 @@ export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   type?: boolean
   balance?: boolean
+  initialBalance?: boolean
+  currency?: boolean
+  color?: boolean
+  icon?: boolean
+  isArchived?: boolean
   accountNumber?: boolean
   email?: boolean
   phone?: boolean
@@ -914,6 +1905,11 @@ export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   type?: boolean
   balance?: boolean
+  initialBalance?: boolean
+  currency?: boolean
+  color?: boolean
+  icon?: boolean
+  isArchived?: boolean
   accountNumber?: boolean
   email?: boolean
   phone?: boolean
@@ -928,6 +1924,11 @@ export type AccountSelectScalar = {
   name?: boolean
   type?: boolean
   balance?: boolean
+  initialBalance?: boolean
+  currency?: boolean
+  color?: boolean
+  icon?: boolean
+  isArchived?: boolean
   accountNumber?: boolean
   email?: boolean
   phone?: boolean
@@ -936,11 +1937,16 @@ export type AccountSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "balance" | "accountNumber" | "email" | "phone" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "balance" | "initialBalance" | "currency" | "color" | "icon" | "isArchived" | "accountNumber" | "email" | "phone" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   paymentMethods?: boolean | Prisma.Account$paymentMethodsArgs<ExtArgs>
   transactions?: boolean | Prisma.Account$transactionsArgs<ExtArgs>
+  transferSourceTransactions?: boolean | Prisma.Account$transferSourceTransactionsArgs<ExtArgs>
+  transferDestinationTransactions?: boolean | Prisma.Account$transferDestinationTransactionsArgs<ExtArgs>
+  recurringTransactions?: boolean | Prisma.Account$recurringTransactionsArgs<ExtArgs>
+  recurringTransferDestinations?: boolean | Prisma.Account$recurringTransferDestinationsArgs<ExtArgs>
+  loans?: boolean | Prisma.Account$loansArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -956,12 +1962,22 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     user: Prisma.$UserPayload<ExtArgs>
     paymentMethods: Prisma.$PaymentMethodPayload<ExtArgs>[]
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
+    transferSourceTransactions: Prisma.$TransactionPayload<ExtArgs>[]
+    transferDestinationTransactions: Prisma.$TransactionPayload<ExtArgs>[]
+    recurringTransactions: Prisma.$RecurringTransactionPayload<ExtArgs>[]
+    recurringTransferDestinations: Prisma.$RecurringTransactionPayload<ExtArgs>[]
+    loans: Prisma.$LoanPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     type: $Enums.AccountType
     balance: number
+    initialBalance: number
+    currency: string
+    color: string | null
+    icon: string | null
+    isArchived: boolean
     accountNumber: string | null
     email: string | null
     phone: string | null
@@ -1365,6 +2381,11 @@ export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   paymentMethods<T extends Prisma.Account$paymentMethodsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$paymentMethodsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentMethodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.Account$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferSourceTransactions<T extends Prisma.Account$transferSourceTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$transferSourceTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferDestinationTransactions<T extends Prisma.Account$transferDestinationTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$transferDestinationTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recurringTransactions<T extends Prisma.Account$recurringTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$recurringTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecurringTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recurringTransferDestinations<T extends Prisma.Account$recurringTransferDestinationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$recurringTransferDestinationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecurringTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  loans<T extends Prisma.Account$loansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$loansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1398,6 +2419,11 @@ export interface AccountFieldRefs {
   readonly name: Prisma.FieldRef<"Account", 'String'>
   readonly type: Prisma.FieldRef<"Account", 'AccountType'>
   readonly balance: Prisma.FieldRef<"Account", 'Float'>
+  readonly initialBalance: Prisma.FieldRef<"Account", 'Float'>
+  readonly currency: Prisma.FieldRef<"Account", 'String'>
+  readonly color: Prisma.FieldRef<"Account", 'String'>
+  readonly icon: Prisma.FieldRef<"Account", 'String'>
+  readonly isArchived: Prisma.FieldRef<"Account", 'Boolean'>
   readonly accountNumber: Prisma.FieldRef<"Account", 'String'>
   readonly email: Prisma.FieldRef<"Account", 'String'>
   readonly phone: Prisma.FieldRef<"Account", 'String'>
@@ -1845,6 +2871,126 @@ export type Account$transactionsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
+}
+
+/**
+ * Account.transferSourceTransactions
+ */
+export type Account$transferSourceTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transaction
+   */
+  select?: Prisma.TransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transaction
+   */
+  omit?: Prisma.TransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransactionInclude<ExtArgs> | null
+  where?: Prisma.TransactionWhereInput
+  orderBy?: Prisma.TransactionOrderByWithRelationInput | Prisma.TransactionOrderByWithRelationInput[]
+  cursor?: Prisma.TransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
+}
+
+/**
+ * Account.transferDestinationTransactions
+ */
+export type Account$transferDestinationTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transaction
+   */
+  select?: Prisma.TransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transaction
+   */
+  omit?: Prisma.TransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransactionInclude<ExtArgs> | null
+  where?: Prisma.TransactionWhereInput
+  orderBy?: Prisma.TransactionOrderByWithRelationInput | Prisma.TransactionOrderByWithRelationInput[]
+  cursor?: Prisma.TransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
+}
+
+/**
+ * Account.recurringTransactions
+ */
+export type Account$recurringTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RecurringTransaction
+   */
+  select?: Prisma.RecurringTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RecurringTransaction
+   */
+  omit?: Prisma.RecurringTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RecurringTransactionInclude<ExtArgs> | null
+  where?: Prisma.RecurringTransactionWhereInput
+  orderBy?: Prisma.RecurringTransactionOrderByWithRelationInput | Prisma.RecurringTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.RecurringTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RecurringTransactionScalarFieldEnum | Prisma.RecurringTransactionScalarFieldEnum[]
+}
+
+/**
+ * Account.recurringTransferDestinations
+ */
+export type Account$recurringTransferDestinationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RecurringTransaction
+   */
+  select?: Prisma.RecurringTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RecurringTransaction
+   */
+  omit?: Prisma.RecurringTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RecurringTransactionInclude<ExtArgs> | null
+  where?: Prisma.RecurringTransactionWhereInput
+  orderBy?: Prisma.RecurringTransactionOrderByWithRelationInput | Prisma.RecurringTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.RecurringTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RecurringTransactionScalarFieldEnum | Prisma.RecurringTransactionScalarFieldEnum[]
+}
+
+/**
+ * Account.loans
+ */
+export type Account$loansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Loan
+   */
+  select?: Prisma.LoanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Loan
+   */
+  omit?: Prisma.LoanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoanInclude<ExtArgs> | null
+  where?: Prisma.LoanWhereInput
+  orderBy?: Prisma.LoanOrderByWithRelationInput | Prisma.LoanOrderByWithRelationInput[]
+  cursor?: Prisma.LoanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LoanScalarFieldEnum | Prisma.LoanScalarFieldEnum[]
 }
 
 /**

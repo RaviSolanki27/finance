@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
+import ReduxProvider from "@/providers/ReduxProvider";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -51,9 +52,11 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider defaultOpen={defaultOpen}>
-            {children}
-          </SidebarProvider>
+          <ReduxProvider>
+            <SidebarProvider defaultOpen={defaultOpen}>
+              {children}
+            </SidebarProvider>
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>

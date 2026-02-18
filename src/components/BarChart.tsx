@@ -18,36 +18,31 @@ import {
 
 export const description = "A multiple bar chart"
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
-
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  income: {
+    label: "Income",
     color: "var(--chart-1)",
   },
-  mobile: {
-    label: "Mobile",
+  expense: {
+    label: "Expense",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig
 
-export default function ChartBarMultiple() {
+export default function ChartBarMultiple({
+  data,
+}: {
+  data: Array<{ month: string; income: number; expense: number }>;
+}) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Income vs Expense</CardTitle>
+        <CardDescription>Last 6 months</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
-          <BarChart accessibilityLayer={false} data={chartData} >
+          <BarChart accessibilityLayer={false} data={data} >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"
@@ -60,19 +55,11 @@ export default function ChartBarMultiple() {
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            <Bar dataKey="income" fill="var(--color-income)" radius={4} />
+            <Bar dataKey="expense" fill="var(--color-expense)" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter> */}
     </Card>
   )
 }
